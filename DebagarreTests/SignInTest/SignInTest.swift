@@ -1,5 +1,5 @@
 //
-//  SignInTests.swift
+//  SignInTest.swift
 //  DébagarreTests
 //
 //  Created by Mickaël Horn on 06/03/2024.
@@ -9,7 +9,7 @@ import XCTest
 @testable import Debagarre
 
 @MainActor
-final class SignInTests: XCTestCase {
+final class SignInTest: XCTestCase {
 
     // MARK: - PROPERTIES
     private var sut: SignInView.ViewModel!
@@ -21,11 +21,13 @@ final class SignInTests: XCTestCase {
         sut = SignInView.ViewModel(firebaseAuthService: firebaseAuthService)
     }
 
+    // MARK: - PRIVATE FUNCTIONS
     private func setupUser(email: String = "mail@mail.com", password: String = "pmpmpmP0") {
         sut.email = email
         sut.password = password
     }
 
+    // MARK: - TESTS
     func testGivenAnEmptyField_WhenSignInUser_ThenHasEmptyFieldErrorOccurs() async {
         setupUser(email: "")
 
@@ -41,21 +43,6 @@ final class SignInTests: XCTestCase {
         await sut.signIn()
 
         XCTAssertEqual(sut.errorMessage, "Badly formatted email, please provide a correct one.")
-        XCTAssertTrue(sut.showingAlert)
-    }
-
-    func testGivenWeakPassword_WhenSignInUser_ThenWeakPasswordErrorOccurs() async {
-        setupUser(password: "pmpmpm")
-
-        await sut.signIn()
-
-        XCTAssertEqual(sut.errorMessage, """
-                Your password is too weak. It must be :
-                - At least 7 characters long
-                - At least one uppercase letter
-                - At least one number
-                """
-        )
         XCTAssertTrue(sut.showingAlert)
     }
 

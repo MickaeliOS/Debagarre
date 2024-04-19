@@ -10,84 +10,102 @@
 
  struct SignInView: View {
      @StateObject private var viewModel = ViewModel()
+     @State private var showingResetPasswordView = false
 
      var body: some View {
-         Color(.background)
-             .ignoresSafeArea()
+         NavigationStack {
+             GeometryReader { proxy in
+                 Color(.background)
+                     .ignoresSafeArea()
+                 
+                 VStack {
+                     Image(.testLogo)
+                         .resizable()
+                         .scaledToFit()
+                         .frame(width: proxy.size.width)
 
-         GeometryReader { proxy in
-             VStack {
-                 Image(.logoWithName)
-                     .resizable()
-                     .scaledToFit()
-                     .frame(width: proxy.size.width)
+                     VStack {
+                         TextField("Email", text: $viewModel.email)
+                             .keyboardType(.emailAddress)
+                             .textInputAutocapitalization(.never)
+                             .frame(height: proxy.size.height * 0.06)
+                             .padding()
+                             .padding(.leading, 30)
+                             .background(.ultraThickMaterial)
+                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                             .overlay(Image(systemName: "envelope")
+                                .foregroundColor(.gray)
+                                .padding(.leading, 15), alignment: .leading)
 
-                 TextField("Username", text: $viewModel.email)
-                     .keyboardType(.emailAddress)
-                     .textInputAutocapitalization(.never)
-                     .frame(height: proxy.size.height * 0.06)
-                     .padding()
-                     .padding(.leading, 30)
-                     .background(.ultraThickMaterial)
-                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                     .overlay(Image(systemName: "envelope")
-                         .foregroundColor(.gray)
-                         .padding(.leading, 15),
-                     alignment: .leading)
+                         HStack {
+                             SecureField("Mot de passe", text: $viewModel.password)
+                                 .frame(height: proxy.size.height * 0.06)
+                                 .padding()
+                                 .padding(.leading, 30)
+                                 .background(.ultraThickMaterial)
+                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                                 .overlay(Image(systemName: "lock.fill")
+                                    .foregroundColor(.gray)
+                                    .padding(.leading, 15), alignment: .leading)
+                         }
 
-                 HStack {
-                     SecureField("Password", text: $viewModel.password)
-                         .frame(height: proxy.size.height * 0.06)
-                         .padding()
-                         .padding(.leading, 30)
-                         .background(.ultraThickMaterial)
-                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                         .overlay(Image(systemName: "lock.fill")
-                             .foregroundColor(.gray)
-                             .padding(.leading, 15),
-                         alignment: .leading)
-                 }
+                         HStack {
+                             Spacer()
 
-                 Spacer()
-
-                 HStack {
-                     Button("Login") {
-                         Task {
-                             await viewModel.signIn()
+                             Button {
+                                 showingResetPasswordView = true
+                             } label: {
+                                 Text("Mot de passe oublié ?")
+                                     .font(.headline)
+                             }
+                             .sheet(isPresented: $showingResetPasswordView) {
+                                 PasswordResetView()
+                             }
                          }
                      }
-                     .frame(width: proxy.frame(in: .local).midX)
-                     .padding([.top, .bottom])
-                     .background(.mainButton)
-                     .foregroundColor(.white)
-                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                     .font(.title2)
-                     .shadow(radius: 10)
-                 }
+                     .padding()
 
-                 Spacer()
+                     Spacer()
 
-                 HStack {
-                     Text("Wanna fight? ")
-                         .foregroundStyle(.white)
+                     HStack {
+                         Button("Se connecter") {
+                             Task {
+                                 await viewModel.signIn()
+                             }
+                         }
+                         .frame(width: proxy.frame(in: .local).midX)
+                         .padding([.top, .bottom])
+                         .background(.mainButton)
+                         .foregroundColor(.white)
+                         .clipShape(RoundedRectangle(cornerRadius: 10))
+                         .font(.title2)
+                         .shadow(radius: 10)
+                     }
 
-                     NavigationLink {
-                         CreateAccountView()
-                     } label: {
-                         Text("Sign Up here 🥊")
-                             .padding(5)
-                             .foregroundStyle(.blue)
-                             .background(.black)
-                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                     Spacer()
+
+                     HStack {
+                         Text("Prêt à débattre ?")
+                             .foregroundStyle(.white)
+
+                         NavigationLink {
+                             CreateAccountView()
+                         } label: {
+                             Text("Par ici ! 🥊")
+                                 .font(.headline)
+                                 .padding(5)
+                                 .foregroundStyle(.blue)
+                                 .background(.black)
+                                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                         }
                      }
                  }
              }
-         }
-         .padding()
-         .alert("Login Error", isPresented: $viewModel.showingAlert) {
-             Button("OK") { }
-         } message: {
-             Text(viewModel.errorMessage)
+             .alert("Erreur de Connexion", isPresented: $viewModel.showingAlert) {
+                 Button("OK") { }
+             } message: {
+                 Text(viewModel.errorMessage)
+             }
          }
      }
  }

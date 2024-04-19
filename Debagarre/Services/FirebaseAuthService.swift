@@ -13,6 +13,7 @@ protocol FirebaseAuthServiceProtocol {
 
     func createUser(email: String, password: String) async throws -> UserID
     func signIn(email: String, password: String) async throws
+    func resetPassword(for email: String) async throws
 }
 
 final class FirebaseAuthService: FirebaseAuthServiceProtocol {
@@ -28,6 +29,14 @@ final class FirebaseAuthService: FirebaseAuthServiceProtocol {
     func signIn(email: String, password: String) async throws {
         do {
             try await Auth.auth().signIn(withEmail: email, password: password)
+        } catch {
+            throw handleFirebaseError(error)
+        }
+    }
+
+    func resetPassword(for email: String) async throws {
+        do {
+            try await Auth.auth().sendPasswordReset(withEmail: email)
         } catch {
             throw handleFirebaseError(error)
         }

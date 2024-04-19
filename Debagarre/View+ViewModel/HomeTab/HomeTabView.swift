@@ -13,12 +13,45 @@ struct HomeTabView: View {
 
     var body: some View {
         TabView {
-            DebateCreationView()
-                .tabItem {
-                    Label("Débat", systemImage: "figure.boxing")
-                }
-                .environmentObject(viewModel)
+            // DEBATE CREATION
+            ZStack {
+                Color.background
+                    .ignoresSafeArea()
 
+                VStack {
+                    DebateCreationView()
+
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray)
+                        .padding([.bottom], 5)
+                }
+            }
+            .tabItem {
+                Label("Débat", systemImage: "figure.boxing")
+            }
+            .environmentObject(viewModel)
+
+            // PROFILE
+            ZStack {
+                Color.background
+                    .ignoresSafeArea()
+
+                VStack {
+                    ProfileView()
+
+                    Rectangle()
+                        .fill(Color.clear)
+                        .frame(height: 10)
+                        .background(Color.white)
+                }
+            }
+            .tabItem {
+                Label("Profil", systemImage: "person.fill")
+            }
+            .environmentObject(viewModel)
+
+            // SETTINGS
             VStack {
                 Button { // DELETE
                     try? Auth.auth().signOut()
@@ -27,9 +60,13 @@ struct HomeTabView: View {
                         .foregroundStyle(.blue)
                 }
             }
+            .tabItem {
+                Label("Settings", systemImage: "gear")
+            }
         }
-        .onAppear {
-            viewModel.fetchUser(userID: Auth.auth().currentUser?.uid ?? "")
+        .task {
+            await viewModel.fetchUser()
+            await viewModel.fetchUserNickname()
         }
         .alert("Could not retrieve User", isPresented: $viewModel.showingAlert) {
             Button("OK") { }

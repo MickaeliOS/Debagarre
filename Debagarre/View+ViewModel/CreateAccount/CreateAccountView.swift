@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct CreateAccountView: View {
     @StateObject var viewModel = ViewModel()
+    @FocusState private var nicknameFocused: Bool
     @FocusState private var emailFocused: Bool
     @FocusState private var passwordFocused: Bool
     @FocusState private var confirmPasswordFocused: Bool
@@ -38,7 +39,7 @@ struct CreateAccountView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 VStack {
-                    Text("Create your account")
+                    Text("Créer ton compte")
                         .foregroundStyle(.white)
                 }
             }
@@ -46,6 +47,44 @@ struct CreateAccountView: View {
     }
 
     @ViewBuilder private var accountInfos: some View {
+        VStack {
+            HStack {
+                TextField("Pseudo", text: $viewModel.nickname)
+                    .textInputAutocapitalization(.never)
+                    .padding()
+                    .padding(.leading, 30)
+                    .background(.ultraThickMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .submitLabel(.next)
+                    .overlay(Image(systemName: "person.fill")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 15),
+                    alignment: .leading)
+                    .onSubmit {
+                        nicknameFocused = true
+                    }
+                .focused($nicknameFocused)
+
+                Button("Vérifier") {
+                    Task {
+                        await viewModel.checkNicknameAvailability()
+                    }
+                }
+                .padding()
+                .background(.mainButton)
+                .foregroundColor(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .shadow(radius: 10)
+                .font(.title3)
+            }
+
+            Text(viewModel.nicknameAvailability.description)
+                .disabled(true)
+                .foregroundStyle(
+                    viewModel.nicknameAvailability == .available ? .green : .red
+                )
+        }
+
         HStack {
             TextField("Email", text: $viewModel.email)
                 .keyboardType(.emailAddress)
@@ -65,7 +104,7 @@ struct CreateAccountView: View {
                 .focused($emailFocused)
         }
 
-        PasswordView(fieldName: "Password", password: $viewModel.password)
+        PasswordView(fieldName: "Mot de passe", password: $viewModel.password)
             .padding()
             .background(.ultraThickMaterial)
             .submitLabel(.next)
@@ -76,7 +115,7 @@ struct CreateAccountView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
 
-        PasswordView(fieldName: "Confirm Password", password: $viewModel.confirmPassword)
+        PasswordView(fieldName: "Confirmer le Mot de passe", password: $viewModel.confirmPassword)
             .padding()
             .background(.ultraThickMaterial)
             .submitLabel(.done)
@@ -85,12 +124,16 @@ struct CreateAccountView: View {
     }
 
     private var signUpButton: some View {
-        Button("Sign me up!") {
+        Button("Entre dans l'arène !") {
             Task {
                 await viewModel.createUser()
 
                 if viewModel.userID.isReallyEmpty == false {
-                    viewModel.saveUserInDatabase(userID: viewModel.userID)
+                    viewModel.saveNicknameInDatabase { result in
+                        if result {
+                            viewModel.saveUserInDatabase(userID: viewModel.userID)
+                        }
+                    }
                 }
             }
         }
@@ -106,7 +149,7 @@ struct CreateAccountView: View {
 
 struct CreateAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             CreateAccountView()
         }
     }

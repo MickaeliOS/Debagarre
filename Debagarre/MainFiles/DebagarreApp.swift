@@ -14,7 +14,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         FirebaseApp.configure()
-        return true
+        return true 
     }
 }
 
@@ -27,23 +27,21 @@ struct YourApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ZStack {
-                    switch sessionManager.state {
-                    case .loading:
-                        DebagarreSplashScreenView()
-                        
-                    case .loggedOut:
-                        SignInView()
-                            .transition(.move(edge: .trailing))
+            ZStack {
+                switch sessionManager.state {
+                case .loading:
+                    DebagarreSplashScreenView()
 
-                    case .loggedIn:
-                        HomeTabView()
-                            .transition(.move(edge: .leading))
-                    }
+                case .loggedOut:
+                    SignInView()
+                        .transition(.move(edge: .trailing))
+
+                case .loggedIn:
+                    HomeTabView()
+                        .transition(.move(edge: .leading))
                 }
-                .animation(.easeInOut(duration: 0.5), value: sessionManager.state)
             }
+            .animation(.easeInOut(duration: 0.5), value: sessionManager.state)
         }
     }
 }

@@ -19,7 +19,7 @@ struct ProfileView: View {
                 Rectangle()
                     .fill(.gray)
                     .frame(height: geometry.size.height / 3)
-                    .clipped()
+//                    .clipped()
                     .overlay(
                         Image(systemName: "person.circle.fill")
                             .resizable()
@@ -30,6 +30,17 @@ struct ProfileView: View {
                             .offset(y: geometry.size.height / 6)
                     )
                     .edgesIgnoringSafeArea(.all)
+
+                HStack {
+                    Spacer()
+
+                    Button("Editer le profil") {
+                        print("ok")
+                    }
+                    .padding()
+                    .offset(y: -geometry.size.height / 12)
+
+                }
 
                 VStack {
 //                    Text(homeTabViewModel.user?.firstname)
@@ -44,39 +55,3 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
 }
-
-/*
- GeometryReader { geometry in
- VStack {
- VStack {
- ZStack {
- Image(systemName: "photo")
- .resizable()
- .ignoresSafeArea()
- .scaledToFill()
- .frame(height: geometry.size.height / 3)
-
- Image(systemName: "person.crop.circle.fill")
- .resizable()
- .scaledToFit()
- .frame(width: 140, height: 140)
- .background(Circle().fill(Color.background))
- .overlay(Circle().stroke(Color.white, lineWidth: 4))
- .shadow(radius: 7)
- //                        .offset(y: geometry.size.height / 5)
- }
- .background(.yellow)
- }
- .background(.green)
-
- Text("rgih")
- .foregroundStyle(.red)
- Text("rgih")
- .foregroundStyle(.red)
- Text("rgih")
- .foregroundStyle(.red)
- Text("rgih")
- .foregroundStyle(.red)
- }
- }
- */

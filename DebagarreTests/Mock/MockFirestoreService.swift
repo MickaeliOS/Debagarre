@@ -22,11 +22,26 @@ final class MockFirestoreService: FirestoreServiceProtocol {
 
     func fetchUser(userID: String) async throws -> Debagarre.User {
         // To delete, just to not generate a warning
-        return User(email: "",
+        return User(nicknameID: "1234",
+                    email: "",
                     lastname: "",
                     firstname: "",
                     birthdate: Date.now,
                     gender: User.Gender.male.rawValue, 
                     profilePicture: "")
+    }
+
+    func fetchUserNickname(nicknameID: String) async throws -> Nickname {
+        // TODO
+        return Nickname(nickname: "")
+    }
+
+    func nicknameCheck(nickname: String) async throws -> Bool {
+        // TODO
+        return true
+    }
+
+    func saveNicknameInDatabase(nickname: Debagarre.Nickname, completion: @escaping (Result<String, Error>) -> Void) {
+        // TODO
     }
 }

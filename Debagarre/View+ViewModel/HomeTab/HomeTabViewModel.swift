@@ -13,6 +13,7 @@ extension HomeTabView {
     @MainActor
     final class ViewModel: ObservableObject {
         @Published var user: User?
+        @Published var userNickname: Nickname?
         @Published var showingAlert = false
         @Published var errorMessage = ""
 
@@ -22,13 +23,23 @@ extension HomeTabView {
             self.firestoreService = firestoreService
         }
 
-        func fetchUser(userID: String) {
-            Task {
-                do {
-                    user = try await firestoreService.fetchUser(userID: userID)
-                } catch let error as FirestoreService.FirestoreServiceError {
-                    handleError(with: error.errorDescription)
-                }
+        func fetchUser() async {
+            do {
+                user = try await firestoreService.fetchUser(userID: Auth.auth().currentUser?.uid ?? "")
+            } catch let error as FirestoreService.FirestoreServiceError {
+                handleError(with: error.errorDescription)
+            } catch {
+                handleError(with: "Something went wrong, please restart the app.")
+            }
+        }
+
+        func fetchUserNickname() async {
+            do {
+                userNickname = try await firestoreService.fetchUserNickname(nicknameID: user?.nicknameID ?? "")
+            } catch let error as FirestoreService.FirestoreServiceError {
+                handleError(with: error.errorDescription)
+            } catch {
+                handleError(with: "Something went wrong, please restart the app.")
             }
         }
 

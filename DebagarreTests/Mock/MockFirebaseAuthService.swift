@@ -11,6 +11,7 @@ import Foundation
 final class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
     var isCreateUserTriggered = false
     var isSignInTriggered = false
+    var isResetPasswordTriggered = false
     var error: Error?
 
     func createUser(email: String, password: String) async throws -> FirebaseAuthServiceProtocol.UserID {
@@ -25,6 +26,14 @@ final class MockFirebaseAuthService: FirebaseAuthServiceProtocol {
 
     func signIn(email: String, password: String) async throws {
         isSignInTriggered = true
+
+        if let error = error {
+            throw error
+        }
+    }
+
+    func resetPassword(for email: String) async throws {
+        isResetPasswordTriggered = true
 
         if let error = error {
             throw error

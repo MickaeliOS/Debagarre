@@ -25,8 +25,8 @@
 		830AFA942B989E5200D0C09D /* AuthenticationTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA902B989E5200D0C09D /* AuthenticationTools.swift */; };
 		830AFA952B989E5200D0C09D /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA912B989E5200D0C09D /* CustomError.swift */; };
 		830AFA982B989E5700D0C09D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 830AFA972B989E5700D0C09D /* GoogleService-Info.plist */; };
-		830AFAAD2B989E8200D0C09D /* CreateAccountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAA62B989E8100D0C09D /* CreateAccountTests.swift */; };
-		830AFAAF2B989E8200D0C09D /* SignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAA82B989E8100D0C09D /* SignInTests.swift */; };
+		830AFAAD2B989E8200D0C09D /* CreateAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAA62B989E8100D0C09D /* CreateAccountTest.swift */; };
+		830AFAAF2B989E8200D0C09D /* SignInTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAA82B989E8100D0C09D /* SignInTest.swift */; };
 		830AFAB12B989E8200D0C09D /* MockFirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAAB2B989E8100D0C09D /* MockFirestoreService.swift */; };
 		830AFAB22B989E8200D0C09D /* MockFirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFAAC2B989E8100D0C09D /* MockFirebaseAuthService.swift */; };
 		830AFAB52B989FCE00D0C09D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 830AFAB42B989FCE00D0C09D /* FirebaseAnalytics */; };
@@ -38,7 +38,12 @@
 		830AFAC12B989FCE00D0C09D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 830AFAC02B989FCE00D0C09D /* FirebaseStorage */; };
 		83534FF22BA1E256001ADBF7 /* DebagarreSplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83534FF12BA1E256001ADBF7 /* DebagarreSplashScreenView.swift */; };
 		83534FF52BA861B4001ADBF7 /* DebateCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83534FF42BA861B4001ADBF7 /* DebateCreationView.swift */; };
+		8356471C2BD13F06003D174E /* PasswordResetTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8356471B2BD13F06003D174E /* PasswordResetTest.swift */; };
 		83810E292BBAE5A100AB7D3E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83810E282BBAE5A100AB7D3E /* ProfileView.swift */; };
+		83810E2C2BBEA9E300AB7D3E /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83810E2B2BBEA9E300AB7D3E /* ViewExtension.swift */; };
+		83810E5B2BC5472A00AB7D3E /* Nickname.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83810E5A2BC5472A00AB7D3E /* Nickname.swift */; };
+		83D9DCE52BCD4D410030663F /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D9DCE42BCD4D410030663F /* PasswordResetView.swift */; };
+		83D9DCE92BCD63BE0030663F /* PasswordResetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D9DCE82BCD63BE0030663F /* PasswordResetViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,13 +77,18 @@
 		830AFA912B989E5200D0C09D /* CustomError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		830AFA972B989E5700D0C09D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		830AFA9D2B989E7400D0C09D /* DebagarreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DebagarreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		830AFAA62B989E8100D0C09D /* CreateAccountTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountTests.swift; sourceTree = "<group>"; };
-		830AFAA82B989E8100D0C09D /* SignInTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInTests.swift; sourceTree = "<group>"; };
+		830AFAA62B989E8100D0C09D /* CreateAccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountTest.swift; sourceTree = "<group>"; };
+		830AFAA82B989E8100D0C09D /* SignInTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInTest.swift; sourceTree = "<group>"; };
 		830AFAAB2B989E8100D0C09D /* MockFirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFirestoreService.swift; sourceTree = "<group>"; };
 		830AFAAC2B989E8100D0C09D /* MockFirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFirebaseAuthService.swift; sourceTree = "<group>"; };
 		83534FF12BA1E256001ADBF7 /* DebagarreSplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebagarreSplashScreenView.swift; sourceTree = "<group>"; };
 		83534FF42BA861B4001ADBF7 /* DebateCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateCreationView.swift; sourceTree = "<group>"; };
+		8356471B2BD13F06003D174E /* PasswordResetTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetTest.swift; sourceTree = "<group>"; };
 		83810E282BBAE5A100AB7D3E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		83810E2B2BBEA9E300AB7D3E /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
+		83810E5A2BC5472A00AB7D3E /* Nickname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nickname.swift; sourceTree = "<group>"; };
+		83D9DCE42BCD4D410030663F /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
+		83D9DCE82BCD63BE0030663F /* PasswordResetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				830AFA722B989E3F00D0C09D /* User.swift */,
+				83810E5A2BC5472A00AB7D3E /* Nickname.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -181,6 +192,8 @@
 			children = (
 				830AFA772B989E4500D0C09D /* SignInView.swift */,
 				830AFA782B989E4500D0C09D /* SignInViewModel.swift */,
+				83D9DCE42BCD4D410030663F /* PasswordResetView.swift */,
+				83D9DCE82BCD63BE0030663F /* PasswordResetViewModel.swift */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -216,7 +229,7 @@
 		830AFA8D2B989E5200D0C09D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				830AFA8F2B989E5200D0C09D /* StringExtension.swift */,
+				835646D62BCD750D003D174E /* Extension */,
 				830AFA902B989E5200D0C09D /* AuthenticationTools.swift */,
 				830AFA912B989E5200D0C09D /* CustomError.swift */,
 			);
@@ -235,8 +248,8 @@
 			isa = PBXGroup;
 			children = (
 				830AFAAA2B989E8100D0C09D /* Mock */,
-				830AFAA62B989E8100D0C09D /* CreateAccountTests.swift */,
-				830AFAA82B989E8100D0C09D /* SignInTests.swift */,
+				835647192BD13EA7003D174E /* CreateAccountTest */,
+				8356471A2BD13EE9003D174E /* SignInTest */,
 			);
 			path = DebagarreTests;
 			sourceTree = "<group>";
@@ -256,6 +269,32 @@
 				83534FF42BA861B4001ADBF7 /* DebateCreationView.swift */,
 			);
 			path = DebateCreationView;
+			sourceTree = "<group>";
+		};
+		835646D62BCD750D003D174E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				83810E2B2BBEA9E300AB7D3E /* ViewExtension.swift */,
+				830AFA8F2B989E5200D0C09D /* StringExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		835647192BD13EA7003D174E /* CreateAccountTest */ = {
+			isa = PBXGroup;
+			children = (
+				830AFAA62B989E8100D0C09D /* CreateAccountTest.swift */,
+			);
+			path = CreateAccountTest;
+			sourceTree = "<group>";
+		};
+		8356471A2BD13EE9003D174E /* SignInTest */ = {
+			isa = PBXGroup;
+			children = (
+				830AFAA82B989E8100D0C09D /* SignInTest.swift */,
+				8356471B2BD13F06003D174E /* PasswordResetTest.swift */,
+			);
+			path = SignInTest;
 			sourceTree = "<group>";
 		};
 		83810E272BBAE58300AB7D3E /* Profile */ = {
@@ -285,6 +324,7 @@
 				830AFA5B2B989E1B00D0C09D /* Sources */,
 				830AFA5C2B989E1B00D0C09D /* Frameworks */,
 				830AFA5D2B989E1B00D0C09D /* Resources */,
+				83810E2A2BBC0D0600AB7D3E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -384,6 +424,32 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		83810E2A2BBC0D0600AB7D3E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		830AFA5B2B989E1B00D0C09D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -392,7 +458,9 @@
 				830AFA8A2B989E4B00D0C09D /* FirebaseAuthService.swift in Sources */,
 				830AFA952B989E5200D0C09D /* CustomError.swift in Sources */,
 				830AFA8C2B989E4B00D0C09D /* FirestoreService.swift in Sources */,
+				83D9DCE52BCD4D410030663F /* PasswordResetView.swift in Sources */,
 				830AFA7F2B989E4500D0C09D /* HomeTabView.swift in Sources */,
+				83D9DCE92BCD63BE0030663F /* PasswordResetViewModel.swift in Sources */,
 				830AFA942B989E5200D0C09D /* AuthenticationTools.swift in Sources */,
 				830AFA822B989E4500D0C09D /* PasswordView.swift in Sources */,
 				830AFA732B989E3F00D0C09D /* User.swift in Sources */,
@@ -404,9 +472,11 @@
 				83534FF22BA1E256001ADBF7 /* DebagarreSplashScreenView.swift in Sources */,
 				830AFA932B989E5200D0C09D /* StringExtension.swift in Sources */,
 				830AFA632B989E1B00D0C09D /* DebagarreApp.swift in Sources */,
+				83810E2C2BBEA9E300AB7D3E /* ViewExtension.swift in Sources */,
 				830AFA842B989E4500D0C09D /* CreateAccountView.swift in Sources */,
 				830AFA812B989E4500D0C09D /* SignInViewModel.swift in Sources */,
 				830AFA8B2B989E4B00D0C09D /* SessionManager.swift in Sources */,
+				83810E5B2BC5472A00AB7D3E /* Nickname.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,8 +484,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				830AFAAF2B989E8200D0C09D /* SignInTests.swift in Sources */,
-				830AFAAD2B989E8200D0C09D /* CreateAccountTests.swift in Sources */,
+				830AFAAF2B989E8200D0C09D /* SignInTest.swift in Sources */,
+				8356471C2BD13F06003D174E /* PasswordResetTest.swift in Sources */,
+				830AFAAD2B989E8200D0C09D /* CreateAccountTest.swift in Sources */,
 				830AFAB22B989E8200D0C09D /* MockFirebaseAuthService.swift in Sources */,
 				830AFAB12B989E8200D0C09D /* MockFirestoreService.swift in Sources */,
 			);
@@ -437,6 +508,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -500,6 +572,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -573,6 +646,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mickaelhorn.Debagarre;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -602,6 +676,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mickaelhorn.Debagarre;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

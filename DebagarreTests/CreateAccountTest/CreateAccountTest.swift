@@ -1,5 +1,5 @@
 //
-//  CreateAccountTests.swift
+//  CreateAccountTest.swift
 //  DébagarreTests
 //
 //  Created by Mickaël Horn on 06/03/2024.
@@ -9,7 +9,7 @@ import XCTest
 @testable import Debagarre
 
 @MainActor
-final class CreateAccountTests: XCTestCase {
+final class CreateAccountTest: XCTestCase {
 
     // MARK: - PROPERTIES
     private var sut: CreateAccountView.ViewModel!
@@ -24,17 +24,21 @@ final class CreateAccountTests: XCTestCase {
     }
 
     // MARK: - PRIVATE FUNCTIONS
-    private func setupUser(email: String = "mail@mail.com",
-                           password: String = "pmpmpmP0",
-                           confirmPassword: String = "pmpmpmP0",
-                           lastname: String = "lastName",
-                           firstname: String = "firstname") {
+    private func setupUser(
+        nickname: String = "testNickName",
+        email: String = "mail@mail.com",
+        password: String = "pmpmpmP0",
+        confirmPassword: String = "pmpmpmP0",
+        lastname: String = "lastName",
+        firstname: String = "firstname"
+    ) {
+        sut.nickname = nickname
         sut.email = email
         sut.password = password
         sut.confirmPassword = confirmPassword
     }
 
-    // MARK: - FIREBASE AUTH TESTS
+    // MARK: - TESTS
     func testGivenBadEmail_WhenCreatingAccount_ThenBadEmailErrorOccurs() async {
         setupUser(email: "mail@mail")
 

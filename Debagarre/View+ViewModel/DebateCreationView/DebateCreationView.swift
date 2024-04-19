@@ -16,43 +16,50 @@ struct DebateCreationView: View {
     @State private var formats = ["Ecrit", "Vidéo"]
     @State private var selectedFormat = "Ecrit"
 
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
+
     var body: some View {
-        GeometryReader { proxy in
-            Color(.background)
-                .ignoresSafeArea()
+        NavigationStack {
+            GeometryReader { proxy in
+                Color(.background)
+                    .ignoresSafeArea()
 
-            VStack {
-                Spacer()
+                VStack {
+                    Spacer()
 
-                VStack(alignment: .leading) {
-                    theme
+                    VStack(alignment: .leading) {
+                        theme
 
-                    Divider()
+                        Divider()
 
-                    pointOfViewInfos
-                        .frame(height: proxy.frame(in: .local).height / 4)
+                        pointOfViewInfos
+                            .frame(height: proxy.frame(in: .local).height / 5)
 
-                    Divider()
+                        Divider()
 
-                    format
+                        format
+
+                        Text(homeTabViewModel.userNickname?.nickname ?? "")
+                    }
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
+                    .padding()
+
+                    goButton
+                        .frame(width: proxy.size.width / 2)
                 }
-                .padding()
-                .background(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding()
-
-                goButton
-                    .frame(width: proxy.size.width / 2)
-
-                Spacer()
             }
+            // MARK: PROBLEM -> si je tape vite au clavier, un 6ème charactère apparaît
+            .onChange(of: pointOfView, { oldValue, newValue in
+                if newValue.count > pointOfViewLimit {
+                    pointOfView = String(newValue.prefix(pointOfViewLimit))
+                }
+            })
+            .navigationTitle("Création du débat")
         }
-        // MARK: PROBLEM -> si je tape vite au clavier, un 6ème charactère apparaît
-        .onChange(of: pointOfView, { oldValue, newValue in
-            if newValue.count > pointOfViewLimit {
-                pointOfView = String(newValue.prefix(pointOfViewLimit))
-            }
-        })
     }
 
     @ViewBuilder private var theme: some View {
@@ -73,7 +80,6 @@ struct DebateCreationView: View {
     @ViewBuilder private var pointOfViewInfos: some View {
         HStack {
             TextField("Ton point de vue", text: $pointOfView, axis: .vertical)
-                .foregroundStyle(.black)
                 .font(.title2)
 
             Text("\(pointOfView.count) / \(pointOfViewLimit)")
@@ -86,17 +92,18 @@ struct DebateCreationView: View {
                     .resizable()
                     .frame(width: 20, height: 20)
             }
-            .padding(.trailing, 10)
             .popover(isPresented: $showPopover, attachmentAnchor: .point(.leading)) {
                 Text("Aide les utilisateurs à choisir avec qui débattre.")
                     .presentationCompactAdaptation(.popover)
             }
         }
+        .padding([.top, .bottom])
     }
 
     @ViewBuilder private var format: some View {
         Text("Choisis le format du débat")
             .font(.title2)
+            .padding([.top])
 
         Picker("Format", selection: $selectedFormat) {
             ForEach(formats, id: \.self) { format in
@@ -119,5 +126,10 @@ struct DebateCreationView: View {
 }
 
 #Preview {
-    DebateCreationView()
+    TabView {
+        DebateCreationView()
+            .tabItem {
+                Label("Débat", systemImage: "figure.boxing")
+            }
+    }
 }
