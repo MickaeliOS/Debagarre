@@ -68,18 +68,23 @@
                      Spacer()
 
                      HStack {
-                         Button("Se connecter") {
-                             Task {
-                                 await viewModel.signIn()
+                         if viewModel.isLoginButtonEnabled {
+                             Button("Se connecter") {
+                                 Task {
+                                     await viewModel.signIn()
+                                 }
                              }
+                             .frame(width: proxy.frame(in: .local).midX)
+                             .padding([.top, .bottom])
+                             .background(.mainButton)
+                             .foregroundColor(.white)
+                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                             .font(.title2)
+                             .shadow(radius: 10)
+                         } else {
+                             ProgressView()
+                                 .controlSize(.large)
                          }
-                         .frame(width: proxy.frame(in: .local).midX)
-                         .padding([.top, .bottom])
-                         .background(.mainButton)
-                         .foregroundColor(.white)
-                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                         .font(.title2)
-                         .shadow(radius: 10)
                      }
 
                      Spacer()

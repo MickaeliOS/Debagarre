@@ -14,6 +14,7 @@ protocol FirebaseAuthServiceProtocol {
     func createUser(email: String, password: String) async throws -> UserID
     func signIn(email: String, password: String) async throws
     func resetPassword(for email: String) async throws
+    func getUserID() throws -> UserID
 }
 
 final class FirebaseAuthService: FirebaseAuthServiceProtocol {
@@ -42,6 +43,14 @@ final class FirebaseAuthService: FirebaseAuthServiceProtocol {
         }
     }
 
+    func getUserID() throws -> UserID {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            throw FirebaseAuthServiceError.noUser
+        }
+
+        return userID
+    }
+
     private func handleFirebaseError(_ error: Error) -> FirebaseAuthServiceError {
         let nsError = error as NSError
 
@@ -64,6 +73,7 @@ extension FirebaseAuthService {
         case invalidCredentials
         case networkError
         case defaultError
+        case noUser
 
         var errorDescription: String {
             switch self {
@@ -75,6 +85,8 @@ extension FirebaseAuthService {
                 return "Please verify your network."
             case .defaultError:
                 return "An error occured."
+            case .noUser:
+                return "No user found, please restart the app."
             }
         }
     }

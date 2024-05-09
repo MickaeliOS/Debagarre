@@ -35,6 +35,7 @@ final class SignInTest: XCTestCase {
 
         XCTAssertEqual(sut.errorMessage, "All fields must be filled.")
         XCTAssertTrue(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 
     func testGivenBadEmail_WhenSignInUser_ThenBadEmailErrorOccurs() async {
@@ -44,6 +45,7 @@ final class SignInTest: XCTestCase {
 
         XCTAssertEqual(sut.errorMessage, "Badly formatted email, please provide a correct one.")
         XCTAssertTrue(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 
     func testGivenRandomError_WhenSignInUser_ThenDefaultErrorOccurs() async {
@@ -55,6 +57,7 @@ final class SignInTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "Something went wrong, please try again.")
         XCTAssertTrue(firebaseAuthService.isSignInTriggered)
         XCTAssertTrue(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 
     func testGivenNoNetwork_WhenSignInUser_ThenNetworkErrorOccurs() async {
@@ -65,6 +68,7 @@ final class SignInTest: XCTestCase {
 
         XCTAssertEqual(sut.errorMessage, "Please verify your network.")
         XCTAssertTrue(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 
     func testGivenInvalidCredentials_WhenSignInUser_ThenInvalidCredentialsErrorOccurs() async {
@@ -76,6 +80,7 @@ final class SignInTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "Incorrect email or password.")
         XCTAssertTrue(firebaseAuthService.isSignInTriggered)
         XCTAssertTrue(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 
     func testGivenCorrectEmailAndPassword_WhenSignInUser_ThenUserIsSignedIn() async {
@@ -85,5 +90,6 @@ final class SignInTest: XCTestCase {
 
         XCTAssertTrue(sut.errorMessage.isReallyEmpty)
         XCTAssertFalse(sut.showingAlert)
+        XCTAssertTrue(sut.isLoginButtonEnabled)
     }
 }

@@ -20,7 +20,7 @@ struct CreateAccountView: View {
             Color(.background)
                 .ignoresSafeArea()
 
-            VStack(alignment: .leading) {
+            VStack {
                 VStack(spacing: 15) {
                     accountInfos
                 }
@@ -32,7 +32,12 @@ struct CreateAccountView: View {
 
                 Spacer()
 
-                signUpButton
+                if viewModel.isCreateAccountButtonEnabled {
+                    signUpButton
+                } else {
+                    ProgressView()
+                        .controlSize(.large)
+                }
             }
             .padding()
         }
@@ -59,11 +64,11 @@ struct CreateAccountView: View {
                     .overlay(Image(systemName: "person.fill")
                         .foregroundColor(.gray)
                         .padding(.leading, 15),
-                    alignment: .leading)
+                             alignment: .leading)
                     .onSubmit {
                         nicknameFocused = true
                     }
-                .focused($nicknameFocused)
+                    .focused($nicknameFocused)
 
                 Button("Vérifier") {
                     Task {
@@ -97,7 +102,7 @@ struct CreateAccountView: View {
                 .overlay(Image(systemName: "envelope")
                     .foregroundColor(.gray)
                     .padding(.leading, 15),
-                alignment: .leading)
+                         alignment: .leading)
                 .onSubmit {
                     passwordFocused = true
                 }
@@ -125,13 +130,19 @@ struct CreateAccountView: View {
 
     private var signUpButton: some View {
         Button("Entre dans l'arène !") {
-            Task {
-                await viewModel.createUser()
+            viewModel.formCheck()
 
-                if viewModel.userID.isReallyEmpty == false {
-                    viewModel.saveNicknameInDatabase { result in
-                        if result {
-                            viewModel.saveUserInDatabase(userID: viewModel.userID)
+            if !viewModel.showingError {
+                Task {
+                    await viewModel.checkNicknameAvailability()
+
+                    viewModel.nicknameAvailability == .available ? await viewModel.createUser() : ()
+
+                    if viewModel.userID.isReallyEmpty == false {
+                        viewModel.saveNicknameInDatabase { result in
+                            if result {
+                                viewModel.saveUserInDatabase(userID: viewModel.userID)
+                            }
                         }
                     }
                 }

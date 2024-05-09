@@ -14,11 +14,17 @@ protocol FirestoreServiceProtocol {
     func fetchUserNickname(nicknameID: String) async throws -> Nickname
     func nicknameCheck(nickname: String) async throws -> Bool
     func saveNicknameInDatabase(nickname: Nickname, completion: @escaping (Result<String, Error>) -> Void)
+//    func getOldestWaitingDebate(mode: DebateRequest.Mode, theme: DebateRequest.Theme) async throws -> DebateRequest?
+    func createDebateRequest(debateRequest: DebateRequest, completion: @escaping (Result<String, Error>) -> Void)
+    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<DebateRequest, Error>) -> Void)
+    func updateDebateRequest(debateRequest: DebateRequest) async throws
+    func getDebateRequest(debateRequestID: String) async throws -> DebateRequest
 }
 
 final class FirestoreService: FirestoreServiceProtocol {
     private static let userTableName = "User"
     private static let nicknameTableName = "Nickname"
+    private static let debateRequestTableName = "DebateRequest"
 
     func saveUserInDatabase(userID: String, user: User) throws {
         do {
@@ -63,15 +69,14 @@ final class FirestoreService: FirestoreServiceProtocol {
 
     func nicknameCheck(nickname: String) async throws -> Bool {
         do {
-            let docRef = Firestore.firestore()
+            let querySnapshot = try await Firestore.firestore()
                 .collection(Self.nicknameTableName)
-                .document(nickname)
+                .whereField("nickname", isEqualTo: nickname)
+                .getDocuments()
 
-            let result = try await docRef.getDocument()
-            return result.exists
+            return !querySnapshot.documents.isEmpty
 
         } catch {
-            print("MKA - L'erreur est : \(error)")
             throw FirestoreServiceError.fetchError
         }
     }
@@ -86,6 +91,85 @@ final class FirestoreService: FirestoreServiceProtocol {
             completion(.failure(error))
         }
     }
+
+//    func getOldestWaitingDebate(mode: DebateRequest.Mode, theme: DebateRequest.Theme) async throws -> DebateRequest? {
+//        let db = Firestore.firestore()
+//
+//        do {
+//            let querySnapshot = try await db
+//                .collection(Self.debateRequestName)
+//                .whereField("mode", isEqualTo: mode.description)
+//                .whereField("theme", isEqualTo: theme.description)
+//                .whereField("status", isEqualTo: DebateRequest.Status.waiting.rawValue)
+//                .whereField("challengerID", isEqualTo: "")
+//                .order(by: "creationTime", descending: false)
+//                .getDocuments()
+//
+//            if let document = querySnapshot.documents.first {
+//                return try document.data(as: DebateRequest.self)
+//            } else {
+//                return nil
+//            }
+//
+//        } catch {
+//            throw FirestoreServiceError.fetchError
+//        }
+//    }
+
+    func createDebateRequest(debateRequest: DebateRequest, completion: @escaping (Result<String, Error>) -> Void) {
+        let db = Firestore.firestore()
+
+        do {
+            let result = try db.collection(Self.debateRequestTableName).addDocument(from: debateRequest)
+            completion(.success(result.documentID))
+        } catch let error {
+            completion(.failure(error))
+        }
+    }
+
+    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<DebateRequest, Error>) -> Void) {
+        let db = Firestore.firestore()
+        let debateRequestRef = db.collection(Self.debateRequestTableName).document(debateRequestID)
+
+        debateRequestRef.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot,
+                  let debate = try? document.data(as: DebateRequest.self) else {
+
+                updateHandler(.failure(FirestoreServiceError.fetchError))
+                return
+            }
+
+            updateHandler(.success(debate))
+        }
+    }
+
+    func updateDebateRequest(debateRequest: DebateRequest) async throws {
+        guard let debateRequestID = debateRequest.id else {
+            throw FirestoreServiceError.couldNotJoinDebate
+        }
+
+        let db = Firestore.firestore()
+        let debateRequestRef = db.collection(Self.debateRequestTableName).document(debateRequestID)
+
+        do {
+            try debateRequestRef.setData(from: debateRequest)
+        } catch {
+            throw FirestoreServiceError.couldNotJoinDebate
+        }
+    }
+
+    func getDebateRequest(debateRequestID: String) async throws -> DebateRequest {
+        do {
+            let docRef = Firestore
+                .firestore()
+                .collection(Self.debateRequestTableName)
+                .document(debateRequestID)
+
+            return try await docRef.getDocument(as: DebateRequest.self)
+        } catch {
+            throw FirestoreServiceError.fetchError
+        }
+    }
 }
 
 extension FirestoreService {
@@ -93,6 +177,8 @@ extension FirestoreService {
         case fetchError
         case cannotSaveUser
         case nicknameAlreadyUsed
+        case cannotCreateDebate
+        case couldNotJoinDebate
 
         var errorDescription: String {
             switch self {
@@ -102,6 +188,10 @@ extension FirestoreService {
                 return "User could not be saved."
             case .nicknameAlreadyUsed:
                 return "Nickname already used, please chose a different one."
+            case .cannotCreateDebate:
+                return "We could not create your debate, please try again."
+            case .couldNotJoinDebate:
+                return "Sorry, we could not get you to the debate, please try again."
             }
         }
     }

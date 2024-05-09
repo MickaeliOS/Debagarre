@@ -15,7 +15,7 @@ final class MockFirestoreService: FirestoreServiceProtocol {
     func saveUserInDatabase(userID: String, user: Debagarre.User) throws {
         isSaveUserInDatabaseTriggered = true
 
-        if let error = error {
+        if let error {
             throw error
         }
     }

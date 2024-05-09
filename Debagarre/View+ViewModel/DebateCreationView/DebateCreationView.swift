@@ -6,27 +6,23 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct DebateCreationView: View {
-    @State private var themes = ["Ecologie", "Veganisme", "Politique", "Guerre", "Surconsommation"]
-    @State private var selectedTheme = "Ecologie"
-    @State private var pointOfView = ""
     @State private var showPopover = false
     @State private var pointOfViewLimit = 100
-    @State private var formats = ["Ecrit", "Vidéo"]
-    @State private var selectedFormat = "Ecrit"
+    @State private var path = NavigationPath()
 
     @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
+    @StateObject var viewModel = DebateCreationView.ViewModel()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             GeometryReader { proxy in
                 Color(.background)
                     .ignoresSafeArea()
 
                 VStack {
-                    Spacer()
-
                     VStack(alignment: .leading) {
                         theme
 
@@ -48,16 +44,26 @@ struct DebateCreationView: View {
                     )
                     .padding()
 
+                    Spacer()
+                    
                     goButton
-                        .frame(width: proxy.size.width / 2)
+                        .padding()
                 }
             }
+            .navigationDestination(for: DebateRequest.self) { debateRequest in
+                DebateWaitingRoomView(debateRequest: debateRequest)
+            }
             // MARK: PROBLEM -> si je tape vite au clavier, un 6ème charactère apparaît
-            .onChange(of: pointOfView, { oldValue, newValue in
+            .onChange(of: viewModel.pointOfView, { oldValue, newValue in
                 if newValue.count > pointOfViewLimit {
-                    pointOfView = String(newValue.prefix(pointOfViewLimit))
+                    viewModel.pointOfView = String(newValue.prefix(pointOfViewLimit))
                 }
             })
+            .alert("Error", isPresented: $viewModel.showingAlert) {
+                Button("OK") { }
+            } message: {
+                Text(viewModel.errorMessage)
+            }
             .navigationTitle("Création du débat")
         }
     }
@@ -69,9 +75,9 @@ struct DebateCreationView: View {
 
             Spacer()
 
-            Picker("Theme", selection: $selectedTheme) {
-                ForEach(themes, id: \.self) { theme in
-                    Text(theme)
+            Picker("Theme", selection: $viewModel.selectedTheme) {
+                ForEach(DebateRequest.Theme.allCases, id: \.self) { theme in
+                    Text(String(describing: theme))
                 }
             }
         }
@@ -79,10 +85,10 @@ struct DebateCreationView: View {
 
     @ViewBuilder private var pointOfViewInfos: some View {
         HStack {
-            TextField("Ton point de vue", text: $pointOfView, axis: .vertical)
+            TextField("Ton point de vue", text: $viewModel.pointOfView, axis: .vertical)
                 .font(.title2)
 
-            Text("\(pointOfView.count) / \(pointOfViewLimit)")
+            Text("\(viewModel.pointOfView.count) / \(pointOfViewLimit)")
                 .foregroundStyle(.gray)
 
             Button(action: {
@@ -105,29 +111,46 @@ struct DebateCreationView: View {
             .font(.title2)
             .padding([.top])
 
-        Picker("Format", selection: $selectedFormat) {
-            ForEach(formats, id: \.self) { format in
-                Text(format)
+        Picker("Format", selection: $viewModel.selectedMode) {
+            ForEach(DebateRequest.Mode.allCases, id: \.self) { mode in
+                Text(String(describing: mode))
             }
         }
         .pickerStyle(.segmented)
     }
 
     @ViewBuilder private var goButton: some View {
-        Button(action: {
-        }) {
-            ZStack {
-                Image(.debateButton)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+        Button("Suivant") {
+            Task {
+                await debateRequestCreationFlow()
             }
         }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(.mainButton)
+        .foregroundColor(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .font(.title2)
+        .shadow(radius: 10)
+    }
+
+    private func debateRequestCreationFlow() async {
+        await viewModel.debateRequestCreationFlow()
+
+        guard let debateRequest = viewModel.debateRequest else {
+            viewModel.errorMessage = "Error, we could not create your debate, please try again."
+            viewModel.showingAlert = true
+            return
+        }
+
+        path.append(debateRequest)
     }
 }
 
 #Preview {
     TabView {
         DebateCreationView()
+            .environmentObject(HomeTabView.ViewModel())
             .tabItem {
                 Label("Débat", systemImage: "figure.boxing")
             }

@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct User: Codable {
+    @DocumentID var id: String?
     let nicknameID: String
     let email: String
     var lastname: String?
@@ -22,5 +24,19 @@ extension User {
         case male = "Male"
         case female = "Female"
         case other = "Other"
+    }
+}
+
+extension User {
+    func getAge() -> Int? {
+        guard let birthdate = self.birthdate else {
+            return nil
+        }
+
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let ageComponents = calendar.dateComponents([.year], from: birthdate, to: currentDate)
+
+        return ageComponents.year
     }
 }

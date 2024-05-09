@@ -6,9 +6,6 @@
 //
 
 import Foundation
-import FirebaseAuth
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 extension CreateAccountView {
 
@@ -21,6 +18,7 @@ extension CreateAccountView {
         @Published var showingError = false
         @Published var errorMessage = ""
         @Published var nicknameAvailability = NicknameAvailability.unknown
+        @Published var isCreateAccountButtonEnabled = true
 
         var userID = ""
         var nicknameID = ""
@@ -76,11 +74,11 @@ extension CreateAccountView.ViewModel {
 extension CreateAccountView.ViewModel {
     func createUser() async {
         do {
-            try formCheck()
             userID = try await firebaseAuthService.createUser(email: email, password: password)
         } catch {
             showingError.toggle()
             errorMessage = handleError(error: error)
+            isCreateAccountButtonEnabled = true
         }
     }
 
@@ -88,9 +86,11 @@ extension CreateAccountView.ViewModel {
         do {
             let user = User(nicknameID: nicknameID, email: email)
             try firestoreService.saveUserInDatabase(userID: userID, user: user)
+            isCreateAccountButtonEnabled = true
         } catch {
             showingError.toggle()
             errorMessage = handleError(error: error)
+            isCreateAccountButtonEnabled = true
         }
     }
 
@@ -105,6 +105,7 @@ extension CreateAccountView.ViewModel {
             case .failure(let error):
                 self.showingError.toggle()
                 self.errorMessage = self.handleError(error: error)
+                self.isCreateAccountButtonEnabled = true
                 completion(false)
             }
         }
@@ -123,25 +124,43 @@ extension CreateAccountView.ViewModel {
         } catch {
             showingError.toggle()
             errorMessage = handleError(error: error)
+            isCreateAccountButtonEnabled = true
         }
     }
 
-    private func formCheck() throws {
+    func formCheck() {
+        isCreateAccountButtonEnabled = false
+
         guard !hasEmptyField else {
-            throw FormError.emptyFields
+            showingError = true
+            errorMessage = FormError.emptyFields.errorDescription
+            isCreateAccountButtonEnabled = true
+            return
         }
 
         guard AuthenticationTools.emailControl(email: email) else {
-            throw AuthenticationTools.AuthenticationError.emailBadlyFormatted
+            showingError = true
+            errorMessage = AuthenticationTools.AuthenticationError.emailBadlyFormatted.errorDescription
+            isCreateAccountButtonEnabled = true
+            return
         }
 
         guard AuthenticationTools.isValidPassword(password) else {
-            throw AuthenticationTools.AuthenticationError.weakPassword
+            showingError = true
+            errorMessage = AuthenticationTools.AuthenticationError.weakPassword.errorDescription
+            isCreateAccountButtonEnabled = true
+            return
         }
 
         guard passwordEqualityCheck(password: password, confirmPassword: confirmPassword) else {
-            throw FormError.passwordsNotEquals
+            showingError = true
+            errorMessage = FormError.passwordsNotEquals.errorDescription
+            isCreateAccountButtonEnabled = true
+            return
         }
+
+        showingError = false
+        errorMessage = ""
     }
 
     private func passwordEqualityCheck(password: String, confirmPassword: String) -> Bool {

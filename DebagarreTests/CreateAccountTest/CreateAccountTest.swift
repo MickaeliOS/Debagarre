@@ -39,32 +39,31 @@ final class CreateAccountTest: XCTestCase {
     }
 
     // MARK: - TESTS
-    func testGivenBadEmail_WhenCreatingAccount_ThenBadEmailErrorOccurs() async {
+    func testGivenBadEmail_WhenCheckingForm_ThenBadEmailErrorOccurs() {
         setupUser(email: "mail@mail")
 
-        await sut.createUser()
+        sut.formCheck()
 
-        XCTAssertFalse(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
         XCTAssertEqual(sut.errorMessage, "Badly formatted email, please provide a correct one.")
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenBadConfirmationPassword_WhenCreatingAccount_ThenBadConfirmationPasswordErrorOccurs() async {
+    func testGivenBadConfirmationPassword_WhenCheckingForm_ThenBadConfirmationPasswordErrorOccurs() {
         setupUser(confirmPassword: "pmpmpmP00")
 
-        await sut.createUser()
+        sut.formCheck()
 
-        XCTAssertFalse(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
         XCTAssertEqual(sut.errorMessage, "Passwords must be equals.")
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenWeakPassword_WhenCreatingAccount_ThenWeakPasswordErrorOccurs() async {
+    func testGivenWeakPassword_WhenCheckingForm_ThenWeakPasswordErrorOccurs() {
         setupUser(password: "weakPassword")
 
-        await sut.createUser()
+        sut.formCheck()
 
-        XCTAssertFalse(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
         XCTAssertEqual(sut.errorMessage, """
                 Your password is too weak. It must be :
@@ -73,19 +72,20 @@ final class CreateAccountTest: XCTestCase {
                 - At least one number
                 """
         )
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenAnEmptyField_WhenCreatingAccount_ThenEmptyFieldsErrorOccurs() async {
+    func testGivenAnEmptyField_WhenCheckingForm_ThenEmptyFieldsErrorOccurs() {
         setupUser(email: "")
 
-        await sut.createUser()
+        sut.formCheck()
 
         XCTAssertEqual(sut.errorMessage, "All fields must be filled.")
-        XCTAssertFalse(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenEmailAlreadyInUse_WhenCreatingAccount_ThenEmailAlreadyInUseErrorOccurs() async {
+    func testGivenEmailAlreadyInUse_WhenCheckingForm_ThenEmailAlreadyInUseErrorOccurs() async {
         setupUser()
         firebaseAuthService.error = FirebaseAuthService.FirebaseAuthServiceError.emailAlreadyInUse
 
@@ -94,9 +94,10 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "The email address is already in use by another account.")
         XCTAssertTrue(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenNetworkError_WhenCreatingAccount_ThenNetworkErrorErrorOccurs() async {
+    func testGivenNetworkError_WhenCheckingForm_ThenNetworkErrorErrorOccurs() async {
         setupUser()
         firebaseAuthService.error = FirebaseAuthService.FirebaseAuthServiceError.networkError
 
@@ -105,9 +106,10 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "Please verify your network.")
         XCTAssertTrue(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
-    func testGivenDefaultError_WhenCreatingAccount_ThenDefaultErrorOccurs() async {
+    func testGivenDefaultError_WhenCheckingForm_ThenDefaultErrorOccurs() async {
         setupUser()
         firebaseAuthService.error = FirebaseAuthService.FirebaseAuthServiceError.defaultError
 
@@ -116,6 +118,7 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "An error occured.")
         XCTAssertTrue(firebaseAuthService.isCreateUserTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
     func testGivenCorrectFields_WhenCreatingAccount_ThenUserIsCreated() async {
@@ -127,6 +130,7 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertTrue(firebaseAuthService.isCreateUserTriggered)
         XCTAssertFalse(sut.showingError)
         XCTAssertEqual(sut.userID, "userID123")
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
     // MARK: - FIRESTORE AUTH TESTS
@@ -137,6 +141,7 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertTrue(sut.errorMessage.isReallyEmpty)
         XCTAssertTrue(firestoreService.isSaveUserInDatabaseTriggered)
         XCTAssertFalse(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
     func testGivenSavingUserInDatabaseWithCannotSaveUserError_WhenSavingUser_ThenCannotSaveUserErrorOccurs() {
@@ -148,6 +153,7 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "User could not be saved.")
         XCTAssertTrue(firestoreService.isSaveUserInDatabaseTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 
     func testGivenRandomError_WhenSavingUser_ThenDefaultErrorOccurs() {
@@ -159,6 +165,7 @@ final class CreateAccountTest: XCTestCase {
         XCTAssertEqual(sut.errorMessage, "Something went wrong, please try again.")
         XCTAssertTrue(firestoreService.isSaveUserInDatabaseTriggered)
         XCTAssertTrue(sut.showingError)
+        XCTAssertTrue(sut.isCreateAccountButtonEnabled)
     }
 }
 

@@ -16,6 +16,7 @@ extension SignInView {
         @Published var password = ""
         @Published var errorMessage = ""
         @Published var showingAlert = false
+        @Published var isLoginButtonEnabled = true
 
         private let firebaseAuthService: FirebaseAuthServiceProtocol
 
@@ -44,12 +45,16 @@ extension SignInView.ViewModel {
 
 extension SignInView.ViewModel {
     func signIn() async {
+        isLoginButtonEnabled = false
+
         do {
             try formCheck()
             try await firebaseAuthService.signIn(email: email, password: password)
+            isLoginButtonEnabled = true
         } catch {
             showingAlert.toggle()
             errorMessage = handleError(error: error)
+            isLoginButtonEnabled = true
         }
     }
 
