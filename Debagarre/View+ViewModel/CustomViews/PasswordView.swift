@@ -37,7 +37,6 @@ struct PasswordView: View {
                     .textInputAutocapitalization(.never)
                     .overlay(Button {
                         isSecure.toggle()
-                        print("TextField")
                     } label: {
                         Image(systemName: "eye")
                             .foregroundColor(.gray)

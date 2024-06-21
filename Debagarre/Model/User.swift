@@ -12,18 +12,31 @@ struct User: Codable {
     @DocumentID var id: String?
     let nicknameID: String
     let email: String
-    var lastname: String?
-    var firstname: String?
     var birthdate: Date?
-    var gender: String?
-    var profilePicture: String?
+    var gender: Gender?
+//    var profilePicture: String?
+//    var bannerPicture: String?
+    var profilePictureID: String?
+    var bannerImageID: String?
+    var numberOfDebate: Int?
+    var aboutMe: String?
 }
 
 extension User {
-    enum Gender: String, CaseIterable {
+    enum Gender: String, CaseIterable, Codable {
         case male = "Male"
         case female = "Female"
         case other = "Other"
+    }
+
+    struct ProfilePicture: Codable {
+        @DocumentID var id: String?
+        var path: String
+    }
+
+    struct BannerImage: Codable {
+        @DocumentID var id: String?
+        var path: String
     }
 }
 
@@ -39,4 +52,13 @@ extension User {
 
         return ageComponents.year
     }
+}
+
+extension User {
+    static let previewUser = User(
+        nicknameID: "1234",
+        email: "test@mail.com",
+        birthdate: Date.now,
+        gender: .male
+    )
 }

@@ -1,5 +1,5 @@
 //
-//  DebateRequest.swift
+//  Debate.swift
 //  Debagarre
 //
 //  Created by Mickaël Horn on 23/04/2024.
@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-struct DebateRequest: Codable, Hashable {
+struct Debate: Codable, Hashable {
     @DocumentID var id: String?
     let creatorID: String
     var challengerID: String?
@@ -22,7 +22,7 @@ struct DebateRequest: Codable, Hashable {
     var isChallengerReady: Bool
 }
 
-extension DebateRequest {
+extension Debate {
     enum Theme: String, CaseIterable, Codable, CustomStringConvertible {
         case ecologie
         case veganisme
@@ -42,6 +42,21 @@ extension DebateRequest {
                 "Guerre"
             case .surconsommation:
                 "Surconsommation"
+            }
+        }
+
+        var icon: String {
+            switch self {
+            case .ecologie:
+                return "leaf.fill"
+            case .veganisme:
+                return "hare.fill"
+            case .politique:
+                return "building.columns.circle"
+            case .guerre:
+                return "shield.fill"
+            case .surconsommation:
+                return "cart.fill"
             }
         }
     }
@@ -73,4 +88,18 @@ extension DebateRequest {
             }
         }
     }
+}
+
+extension Debate {
+    static let previewDebate = Debate(
+        creatorID: "1234",
+        creationTime: Date.now,
+        theme: .ecologie,
+        mode: .chat,
+        pointOfView: "Test POV",
+        timeLimit: 30,
+        status: .waiting,
+        isCreatorReady: false,
+        isChallengerReady: false
+    )
 }

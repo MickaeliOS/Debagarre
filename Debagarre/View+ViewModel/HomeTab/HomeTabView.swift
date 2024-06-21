@@ -14,42 +14,27 @@ struct HomeTabView: View {
     var body: some View {
         TabView {
             // DEBATE CREATION
-            ZStack {
-                Color.background
-                    .ignoresSafeArea()
 
-                VStack {
-                    DebateCreationView()
+            VStack {
+                DebateCreationView()
 
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.gray)
-                        .padding([.bottom], 5)
-                }
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(.gray)
+                    .padding([.bottom], 5)
             }
+
             .tabItem {
                 Label("Débat", systemImage: "figure.boxing")
             }
             .environmentObject(viewModel)
 
             // PROFILE
-            ZStack {
-                Color.background
-                    .ignoresSafeArea()
-
-                VStack {
-                    ProfileView()
-
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(height: 10)
-                        .background(Color.white)
+            ProfileView(isExternalUserPresented: false)
+                .tabItem {
+                    Label("Profil", systemImage: "person.fill")
                 }
-            }
-            .tabItem {
-                Label("Profil", systemImage: "person.fill")
-            }
-            .environmentObject(viewModel)
+                .environmentObject(viewModel)
 
             // SETTINGS
             VStack {
@@ -63,10 +48,19 @@ struct HomeTabView: View {
             .tabItem {
                 Label("Settings", systemImage: "gear")
             }
+
+            DebateResearchView()
+                .tabItem {
+                    Label("Recherche", systemImage: "magnifyingglass")
+                }
+                .environmentObject(viewModel)
         }
         .task {
             await viewModel.fetchUser()
             await viewModel.fetchUserNickname()
+            await viewModel.fetchUserProfilePicture()
+            await viewModel.fetchUserBannerImage()
+            viewModel.listenForUserChanges()
         }
         .alert("Could not retrieve User", isPresented: $viewModel.showingAlert) {
             Button("OK") { }
@@ -76,8 +70,8 @@ struct HomeTabView: View {
     }
 }
 
-struct TabView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeTabView()
-    }
-}
+//struct TabView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeTabView()
+//    }
+//}

@@ -19,7 +19,7 @@
                      .ignoresSafeArea()
                  
                  VStack {
-                     Image(.testLogo)
+                     Image(.signInLogo)
                          .resizable()
                          .scaledToFit()
                          .frame(width: proxy.size.width)

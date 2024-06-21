@@ -9,26 +9,38 @@ import Foundation
 import FirebaseFirestore
 
 protocol FirestoreServiceProtocol {
+    associatedtype CollectionName: RawRepresentable
+
     func saveUserInDatabase(userID: String, user: User) throws
     func fetchUser(userID: String) async throws -> User
     func fetchUserNickname(nicknameID: String) async throws -> Nickname
     func nicknameCheck(nickname: String) async throws -> Bool
     func saveNicknameInDatabase(nickname: Nickname, completion: @escaping (Result<String, Error>) -> Void)
-//    func getOldestWaitingDebate(mode: DebateRequest.Mode, theme: DebateRequest.Theme) async throws -> DebateRequest?
-    func createDebateRequest(debateRequest: DebateRequest, completion: @escaping (Result<String, Error>) -> Void)
-    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<DebateRequest, Error>) -> Void)
-    func updateDebateRequest(debateRequest: DebateRequest) async throws
-    func getDebateRequest(debateRequestID: String) async throws -> DebateRequest
+    func createDebateRequest(debateRequest: Debate, completion: @escaping (Result<String, Error>) -> Void)
+    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<Debate, Error>) -> Void)
+    func listenForUserChange(userID: String, updateHandler: @escaping (Result<User, Error>) -> Void)
+    func listenForProfilePictureChange(profilePictureID: String, updateHandler: @escaping (Result<User.ProfilePicture, Error>) -> Void)
+    func listenForBannerImageChange(bannerImageID: String, updateHandler: @escaping (Result<User.BannerImage, Error>) -> Void)
+    func updateDebateRequest(debateRequest: Debate) async throws
+    func getDebateRequest(debateRequestID: String) async throws -> Debate
+    func getDebateRequestList(theme: Debate.Theme) async throws -> [Debate]
+    func updateUser(user: User) throws
+    func getUserProfilePicture(profilePictureID: String) async throws -> User.ProfilePicture
+    func getUserBannerImage(bannerImageID: String) async throws -> User.BannerImage
 }
 
 final class FirestoreService: FirestoreServiceProtocol {
-    private static let userTableName = "User"
-    private static let nicknameTableName = "Nickname"
-    private static let debateRequestTableName = "DebateRequest"
+    enum CollectionName: String {
+        case userTableName = "User"
+        case nicknameTableName = "Nickname"
+        case debateRequestTableName = "Debate"
+        case userProfilePictureTableName = "ProfilePicture"
+        case userBannerImageTableName = "BannerImage"
+    }
 
     func saveUserInDatabase(userID: String, user: User) throws {
         do {
-            try Firestore.firestore().collection(Self.userTableName)
+            try Firestore.firestore().collection(CollectionName.userTableName.rawValue)
                 .document(userID)
                 .setData(from: user)
         } catch {
@@ -43,7 +55,7 @@ final class FirestoreService: FirestoreServiceProtocol {
 
         do {
             let docRef = Firestore.firestore()
-                .collection(Self.userTableName)
+                .collection(CollectionName.userTableName.rawValue)
                 .document(userID)
 
             return try await docRef.getDocument(as: User.self)
@@ -56,7 +68,7 @@ final class FirestoreService: FirestoreServiceProtocol {
     func fetchUserNickname(nicknameID: String) async throws -> Nickname {
         do {
             let docRef = Firestore.firestore().collection(
-                Self.nicknameTableName
+                CollectionName.nicknameTableName.rawValue
             ).document(
                 nicknameID
             )
@@ -70,7 +82,7 @@ final class FirestoreService: FirestoreServiceProtocol {
     func nicknameCheck(nickname: String) async throws -> Bool {
         do {
             let querySnapshot = try await Firestore.firestore()
-                .collection(Self.nicknameTableName)
+                .collection(CollectionName.nicknameTableName.rawValue)
                 .whereField("nickname", isEqualTo: nickname)
                 .getDocuments()
 
@@ -85,55 +97,31 @@ final class FirestoreService: FirestoreServiceProtocol {
         let db = Firestore.firestore()
 
         do {
-            let result = try db.collection(Self.nicknameTableName).addDocument(from: nickname)
+            let result = try db.collection(CollectionName.nicknameTableName.rawValue).addDocument(from: nickname)
             completion(.success(result.documentID))
         } catch let error {
             completion(.failure(error))
         }
     }
 
-//    func getOldestWaitingDebate(mode: DebateRequest.Mode, theme: DebateRequest.Theme) async throws -> DebateRequest? {
-//        let db = Firestore.firestore()
-//
-//        do {
-//            let querySnapshot = try await db
-//                .collection(Self.debateRequestName)
-//                .whereField("mode", isEqualTo: mode.description)
-//                .whereField("theme", isEqualTo: theme.description)
-//                .whereField("status", isEqualTo: DebateRequest.Status.waiting.rawValue)
-//                .whereField("challengerID", isEqualTo: "")
-//                .order(by: "creationTime", descending: false)
-//                .getDocuments()
-//
-//            if let document = querySnapshot.documents.first {
-//                return try document.data(as: DebateRequest.self)
-//            } else {
-//                return nil
-//            }
-//
-//        } catch {
-//            throw FirestoreServiceError.fetchError
-//        }
-//    }
-
-    func createDebateRequest(debateRequest: DebateRequest, completion: @escaping (Result<String, Error>) -> Void) {
+    func createDebateRequest(debateRequest: Debate, completion: @escaping (Result<String, Error>) -> Void) {
         let db = Firestore.firestore()
 
         do {
-            let result = try db.collection(Self.debateRequestTableName).addDocument(from: debateRequest)
+            let result = try db.collection(CollectionName.debateRequestTableName.rawValue).addDocument(from: debateRequest)
             completion(.success(result.documentID))
         } catch let error {
             completion(.failure(error))
         }
     }
 
-    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<DebateRequest, Error>) -> Void) {
+    func listenForDebateChanges(debateRequestID: String, updateHandler: @escaping (Result<Debate, Error>) -> Void) {
         let db = Firestore.firestore()
-        let debateRequestRef = db.collection(Self.debateRequestTableName).document(debateRequestID)
+        let debateRequestRef = db.collection(CollectionName.debateRequestTableName.rawValue).document(debateRequestID)
 
         debateRequestRef.addSnapshotListener { documentSnapshot, error in
             guard let document = documentSnapshot,
-                  let debate = try? document.data(as: DebateRequest.self) else {
+                  let debate = try? document.data(as: Debate.self) else {
 
                 updateHandler(.failure(FirestoreServiceError.fetchError))
                 return
@@ -143,13 +131,61 @@ final class FirestoreService: FirestoreServiceProtocol {
         }
     }
 
-    func updateDebateRequest(debateRequest: DebateRequest) async throws {
+    func listenForUserChange(userID: String, updateHandler: @escaping (Result<User, Error>) -> Void) {
+        let db = Firestore.firestore()
+        let userRef = db.collection(CollectionName.userTableName.rawValue).document(userID)
+
+        userRef.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot,
+                  let user = try? document.data(as: User.self) else {
+
+                updateHandler(.failure(FirestoreServiceError.fetchError))
+                return
+            }
+
+            updateHandler(.success(user))
+        }
+    }
+
+    func listenForProfilePictureChange(profilePictureID: String, updateHandler: @escaping (Result<User.ProfilePicture, Error>) -> Void) {
+        let db = Firestore.firestore()
+        let profilePictureRef = db.collection(CollectionName.userProfilePictureTableName.rawValue).document(profilePictureID)
+
+        profilePictureRef.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot,
+                  let profilePicture = try? document.data(as: User.ProfilePicture.self) else {
+
+                updateHandler(.failure(FirestoreServiceError.fetchError))
+                return
+            }
+
+            updateHandler(.success(profilePicture))
+        }
+    }
+
+    func listenForBannerImageChange(bannerImageID: String, updateHandler: @escaping (Result<User.BannerImage, Error>) -> Void) {
+        let db = Firestore.firestore()
+        let bannerImageRef = db.collection(CollectionName.userBannerImageTableName.rawValue).document(bannerImageID)
+
+        bannerImageRef.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot,
+                  let bannerImage = try? document.data(as: User.BannerImage.self) else {
+
+                updateHandler(.failure(FirestoreServiceError.fetchError))
+                return
+            }
+
+            updateHandler(.success(bannerImage))
+        }
+    }
+
+    func updateDebateRequest(debateRequest: Debate) async throws {
         guard let debateRequestID = debateRequest.id else {
             throw FirestoreServiceError.couldNotJoinDebate
         }
 
         let db = Firestore.firestore()
-        let debateRequestRef = db.collection(Self.debateRequestTableName).document(debateRequestID)
+        let debateRequestRef = db.collection(CollectionName.debateRequestTableName.rawValue).document(debateRequestID)
 
         do {
             try debateRequestRef.setData(from: debateRequest)
@@ -158,14 +194,78 @@ final class FirestoreService: FirestoreServiceProtocol {
         }
     }
 
-    func getDebateRequest(debateRequestID: String) async throws -> DebateRequest {
+    func getDebateRequest(debateRequestID: String) async throws -> Debate {
         do {
             let docRef = Firestore
                 .firestore()
-                .collection(Self.debateRequestTableName)
+                .collection(CollectionName.debateRequestTableName.rawValue)
                 .document(debateRequestID)
 
-            return try await docRef.getDocument(as: DebateRequest.self)
+            return try await docRef.getDocument(as: Debate.self)
+        } catch {
+            throw FirestoreServiceError.fetchError
+        }
+    }
+
+    func getDebateRequestList(theme: Debate.Theme) async throws -> [Debate] {
+        var debateRequests: [Debate] = []
+
+        do {
+            let querySnapshot = try await Firestore
+                .firestore()
+                .collection(CollectionName.debateRequestTableName.rawValue)
+                .whereField("theme", isEqualTo: theme.rawValue)
+                .getDocuments()
+
+            try querySnapshot.documents.forEach { document in
+                let debateRequest = try document.data(as: Debate.self)
+                debateRequests.append(debateRequest)
+            }
+
+            return debateRequests
+        } catch {
+            throw FirestoreServiceError.fetchError
+        }
+    }
+
+    func updateUser(user: User) throws {
+        guard let userID = user.id else {
+            throw FirestoreServiceError.cannotSaveUser
+        }
+
+        let db = Firestore.firestore()
+        let userRef = db.collection(CollectionName.userTableName.rawValue).document(userID)
+
+        do {
+            try userRef.setData(from: user, merge: true)
+        } catch {
+            throw FirestoreServiceError.cannotSaveUser
+        }
+    }
+
+    func getUserProfilePicture(profilePictureID: String) async throws -> User.ProfilePicture {
+        do {
+            let docRef = Firestore.firestore().collection(
+                CollectionName.userProfilePictureTableName.rawValue
+            ).document(
+                profilePictureID
+            )
+
+            return try await docRef.getDocument(as: User.ProfilePicture.self)
+        } catch {
+            throw FirestoreServiceError.fetchError
+        }
+    }
+
+    func getUserBannerImage(bannerImageID: String) async throws -> User.BannerImage {
+        do {
+            let docRef = Firestore.firestore().collection(
+                CollectionName.userBannerImageTableName.rawValue
+            ).document(
+                bannerImageID
+            )
+
+            return try await docRef.getDocument(as: User.BannerImage.self)
         } catch {
             throw FirestoreServiceError.fetchError
         }

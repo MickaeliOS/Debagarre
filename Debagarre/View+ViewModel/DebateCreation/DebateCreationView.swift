@@ -13,7 +13,7 @@ struct DebateCreationView: View {
     @State private var pointOfViewLimit = 100
     @State private var path = NavigationPath()
 
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
     @StateObject var viewModel = DebateCreationView.ViewModel()
 
     var body: some View {
@@ -50,7 +50,7 @@ struct DebateCreationView: View {
                         .padding()
                 }
             }
-            .navigationDestination(for: DebateRequest.self) { debateRequest in
+            .navigationDestination(for: Debate.self) { debateRequest in
                 DebateWaitingRoomView(debateRequest: debateRequest)
             }
             // MARK: PROBLEM -> si je tape vite au clavier, un 6ème charactère apparaît
@@ -76,7 +76,7 @@ struct DebateCreationView: View {
             Spacer()
 
             Picker("Theme", selection: $viewModel.selectedTheme) {
-                ForEach(DebateRequest.Theme.allCases, id: \.self) { theme in
+                ForEach(Debate.Theme.allCases, id: \.self) { theme in
                     Text(String(describing: theme))
                 }
             }
@@ -112,7 +112,7 @@ struct DebateCreationView: View {
             .padding([.top])
 
         Picker("Format", selection: $viewModel.selectedMode) {
-            ForEach(DebateRequest.Mode.allCases, id: \.self) { mode in
+            ForEach(Debate.Mode.allCases, id: \.self) { mode in
                 Text(String(describing: mode))
             }
         }

@@ -21,16 +21,16 @@ extension DebateWaitingRoomView {
         @Published var debateRequestChallengerNickname: String?
         @Published var showChallenger = true
 
-        private var firestoreService: FirestoreServiceProtocol
+        private var firestoreService: any FirestoreServiceProtocol
 
-        init(firestoreService: FirestoreServiceProtocol = FirestoreService()) {
+        init(firestoreService: any FirestoreServiceProtocol = FirestoreService()) {
             self.firestoreService = firestoreService
         }
     }
 }
 
 extension DebateWaitingRoomView.ViewModel {
-    func setupCreatorAndChallenger(currentUser: User, currentUserNickname: Nickname, debateRequest: DebateRequest) async {
+    func setupCreatorAndChallenger(currentUser: User, currentUserNickname: Nickname, debateRequest: Debate) async {
         if debateRequest.creatorID == currentUser.id {
             debateRequestCreator = currentUser
             debateRequestCreatorNickname = currentUserNickname.nickname
@@ -67,7 +67,7 @@ extension DebateWaitingRoomView.ViewModel {
         return String(userAge)
     }
 
-    func updateDebateRequest(debateRequest: DebateRequest) async {
+    func updateDebateRequest(debateRequest: Debate) async {
         do {
             try await firestoreService.updateDebateRequest(debateRequest: debateRequest)
         } catch {
@@ -86,10 +86,6 @@ extension DebateWaitingRoomView.ViewModel {
         firestoreService.listenForDebateChanges(debateRequestID: debateRequestID) { [weak self] result in
             switch result {
             case .success(let debate):
-                if debate.isCreatorReady {
-                    print("GG!")
-                }
-
                 guard debate.challengerID != nil, debate.isCreatorReady, debate.isChallengerReady else {
                     return
                 }

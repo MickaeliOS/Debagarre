@@ -37,9 +37,15 @@
 		830AFABF2B989FCE00D0C09D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 830AFABE2B989FCE00D0C09D /* FirebaseFirestoreSwift */; };
 		830AFAC12B989FCE00D0C09D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 830AFAC02B989FCE00D0C09D /* FirebaseStorage */; };
 		833060582BECF69E00D99765 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833060572BECF69E00D99765 /* DateExtension.swift */; };
+		8330605A2BF24B9D00D99765 /* DebateResearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833060592BF24B9D00D99765 /* DebateResearchViewModel.swift */; };
+		8330605C2BF2592100D99765 /* DebateCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330605B2BF2592100D99765 /* DebateCellView.swift */; };
+		8330605F2BF360B200D99765 /* DebateCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330605E2BF360B200D99765 /* DebateCellViewModel.swift */; };
+		833632062BF791E000DBB497 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833632052BF791E000DBB497 /* EditProfileView.swift */; };
+		8336320A2C060D3E00DBB497 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833632092C060D3E00DBB497 /* StorageService.swift */; };
+		833632102C08B83300DBB497 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8336320F2C08B83300DBB497 /* EditProfileViewModel.swift */; };
 		834312D52BD7E2C000ADE940 /* DebateWaitingRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834312D42BD7E2C000ADE940 /* DebateWaitingRoomView.swift */; };
 		834312D72BD7E44300ADE940 /* DebateWaitingRoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834312D62BD7E44300ADE940 /* DebateWaitingRoomViewModel.swift */; };
-		834312D92BD7E7CD00ADE940 /* DebateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834312D82BD7E7CD00ADE940 /* DebateRequest.swift */; };
+		834312D92BD7E7CD00ADE940 /* Debate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834312D82BD7E7CD00ADE940 /* Debate.swift */; };
 		834312DB2BD7E87C00ADE940 /* DebateCreationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834312DA2BD7E87C00ADE940 /* DebateCreationViewModel.swift */; };
 		8343131C2BDFD15B00ADE940 /* DebateFightingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8343131B2BDFD15B00ADE940 /* DebateFightingView.swift */; };
 		8343135A2BE517B500ADE940 /* DebateResearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834313592BE517B500ADE940 /* DebateResearchView.swift */; };
@@ -89,9 +95,15 @@
 		830AFAAB2B989E8100D0C09D /* MockFirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFirestoreService.swift; sourceTree = "<group>"; };
 		830AFAAC2B989E8100D0C09D /* MockFirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFirebaseAuthService.swift; sourceTree = "<group>"; };
 		833060572BECF69E00D99765 /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		833060592BF24B9D00D99765 /* DebateResearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateResearchViewModel.swift; sourceTree = "<group>"; };
+		8330605B2BF2592100D99765 /* DebateCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateCellView.swift; sourceTree = "<group>"; };
+		8330605E2BF360B200D99765 /* DebateCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateCellViewModel.swift; sourceTree = "<group>"; };
+		833632052BF791E000DBB497 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		833632092C060D3E00DBB497 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
+		8336320F2C08B83300DBB497 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
 		834312D42BD7E2C000ADE940 /* DebateWaitingRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateWaitingRoomView.swift; sourceTree = "<group>"; };
 		834312D62BD7E44300ADE940 /* DebateWaitingRoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateWaitingRoomViewModel.swift; sourceTree = "<group>"; };
-		834312D82BD7E7CD00ADE940 /* DebateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateRequest.swift; sourceTree = "<group>"; };
+		834312D82BD7E7CD00ADE940 /* Debate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debate.swift; sourceTree = "<group>"; };
 		834312DA2BD7E87C00ADE940 /* DebateCreationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateCreationViewModel.swift; sourceTree = "<group>"; };
 		8343131B2BDFD15B00ADE940 /* DebateFightingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateFightingView.swift; sourceTree = "<group>"; };
 		834313592BE517B500ADE940 /* DebateResearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateResearchView.swift; sourceTree = "<group>"; };
@@ -184,7 +196,7 @@
 			children = (
 				830AFA722B989E3F00D0C09D /* User.swift */,
 				83810E5A2BC5472A00AB7D3E /* Nickname.swift */,
-				834312D82BD7E7CD00ADE940 /* DebateRequest.swift */,
+				834312D82BD7E7CD00ADE940 /* Debate.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -192,14 +204,14 @@
 		830AFA742B989E4500D0C09D /* View+ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				834313582BE517A200ADE940 /* DebateResearchView */,
 				830AFA792B989E4500D0C09D /* CustomViews */,
 				830AFA762B989E4500D0C09D /* SignIn */,
 				830AFA7B2B989E4500D0C09D /* CreateAccount */,
 				83C9C54C2B9F139700E33708 /* HomeTab */,
-				83534FF32BA86187001ADBF7 /* DebateCreationView */,
+				83534FF32BA86187001ADBF7 /* DebateCreation */,
 				834312D32BD7E2A600ADE940 /* DebateLoadingScreen */,
 				8343131A2BDFD14100ADE940 /* DebateFightingScreen */,
+				834313582BE517A200ADE940 /* DebateResearch */,
 				83810E272BBAE58300AB7D3E /* Profile */,
 			);
 			path = "View+ViewModel";
@@ -219,6 +231,7 @@
 		830AFA792B989E4500D0C09D /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				8330605D2BF360A200D99765 /* DebateRequestCell */,
 				830AFA7A2B989E4500D0C09D /* PasswordView.swift */,
 				83534FF12BA1E256001ADBF7 /* DebagarreSplashScreenView.swift */,
 			);
@@ -240,6 +253,7 @@
 				830AFA882B989E4B00D0C09D /* SessionManager.swift */,
 				830AFA872B989E4B00D0C09D /* FirebaseAuthService.swift */,
 				830AFA892B989E4B00D0C09D /* FirestoreService.swift */,
+				833632092C060D3E00DBB497 /* StorageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -281,6 +295,24 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		8330605D2BF360A200D99765 /* DebateRequestCell */ = {
+			isa = PBXGroup;
+			children = (
+				8330605B2BF2592100D99765 /* DebateCellView.swift */,
+				8330605E2BF360B200D99765 /* DebateCellViewModel.swift */,
+			);
+			path = DebateRequestCell;
+			sourceTree = "<group>";
+		};
+		8336320E2C08B81C00DBB497 /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				833632052BF791E000DBB497 /* EditProfileView.swift */,
+				8336320F2C08B83300DBB497 /* EditProfileViewModel.swift */,
+			);
+			name = EditProfile;
+			sourceTree = "<group>";
+		};
 		834312D32BD7E2A600ADE940 /* DebateLoadingScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,21 +330,22 @@
 			path = DebateFightingScreen;
 			sourceTree = "<group>";
 		};
-		834313582BE517A200ADE940 /* DebateResearchView */ = {
+		834313582BE517A200ADE940 /* DebateResearch */ = {
 			isa = PBXGroup;
 			children = (
 				834313592BE517B500ADE940 /* DebateResearchView.swift */,
+				833060592BF24B9D00D99765 /* DebateResearchViewModel.swift */,
 			);
-			path = DebateResearchView;
+			path = DebateResearch;
 			sourceTree = "<group>";
 		};
-		83534FF32BA86187001ADBF7 /* DebateCreationView */ = {
+		83534FF32BA86187001ADBF7 /* DebateCreation */ = {
 			isa = PBXGroup;
 			children = (
 				83534FF42BA861B4001ADBF7 /* DebateCreationView.swift */,
 				834312DA2BD7E87C00ADE940 /* DebateCreationViewModel.swift */,
 			);
-			path = DebateCreationView;
+			path = DebateCreation;
 			sourceTree = "<group>";
 		};
 		835646D62BCD750D003D174E /* Extension */ = {
@@ -346,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				83810E282BBAE5A100AB7D3E /* ProfileView.swift */,
+				8336320E2C08B81C00DBB497 /* EditProfile */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -505,18 +539,21 @@
 				830AFA8C2B989E4B00D0C09D /* FirestoreService.swift in Sources */,
 				83D9DCE52BCD4D410030663F /* PasswordResetView.swift in Sources */,
 				830AFA7F2B989E4500D0C09D /* HomeTabView.swift in Sources */,
-				834312D92BD7E7CD00ADE940 /* DebateRequest.swift in Sources */,
+				834312D92BD7E7CD00ADE940 /* Debate.swift in Sources */,
 				83D9DCE92BCD63BE0030663F /* PasswordResetViewModel.swift in Sources */,
 				834312D52BD7E2C000ADE940 /* DebateWaitingRoomView.swift in Sources */,
 				830AFA942B989E5200D0C09D /* AuthenticationTools.swift in Sources */,
 				830AFA822B989E4500D0C09D /* PasswordView.swift in Sources */,
+				8330605F2BF360B200D99765 /* DebateCellViewModel.swift in Sources */,
 				830AFA732B989E3F00D0C09D /* User.swift in Sources */,
+				8330605C2BF2592100D99765 /* DebateCellView.swift in Sources */,
 				8343131C2BDFD15B00ADE940 /* DebateFightingView.swift in Sources */,
 				8343135A2BE517B500ADE940 /* DebateResearchView.swift in Sources */,
 				830AFA852B989E4500D0C09D /* HomeTabViewModel.swift in Sources */,
 				830AFA832B989E4500D0C09D /* CreateAccountViewModel.swift in Sources */,
 				833060582BECF69E00D99765 /* DateExtension.swift in Sources */,
 				83534FF52BA861B4001ADBF7 /* DebateCreationView.swift in Sources */,
+				8330605A2BF24B9D00D99765 /* DebateResearchViewModel.swift in Sources */,
 				834312DB2BD7E87C00ADE940 /* DebateCreationViewModel.swift in Sources */,
 				83810E292BBAE5A100AB7D3E /* ProfileView.swift in Sources */,
 				830AFA802B989E4500D0C09D /* SignInView.swift in Sources */,
@@ -526,9 +563,12 @@
 				83810E2C2BBEA9E300AB7D3E /* ViewExtension.swift in Sources */,
 				830AFA842B989E4500D0C09D /* CreateAccountView.swift in Sources */,
 				830AFA812B989E4500D0C09D /* SignInViewModel.swift in Sources */,
+				8336320A2C060D3E00DBB497 /* StorageService.swift in Sources */,
 				830AFA8B2B989E4B00D0C09D /* SessionManager.swift in Sources */,
 				83810E5B2BC5472A00AB7D3E /* Nickname.swift in Sources */,
+				833632102C08B83300DBB497 /* EditProfileViewModel.swift in Sources */,
 				834312D72BD7E44300ADE940 /* DebateWaitingRoomViewModel.swift in Sources */,
+				833632062BF791E000DBB497 /* EditProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

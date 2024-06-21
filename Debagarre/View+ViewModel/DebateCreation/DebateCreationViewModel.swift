@@ -10,22 +10,22 @@ import Foundation
 extension DebateCreationView {
 
     @MainActor
-    final class ViewModel: ObservableObject {
+    final class ViewModel<Firestore: FirestoreServiceProtocol>: ObservableObject {
         @Published var pointOfView = ""
-        @Published var themes = DebateRequest.Theme.allCases.map { $0.description }
-        @Published var selectedTheme = DebateRequest.Theme.ecologie
-        @Published var modes = DebateRequest.Mode.allCases.map { $0.description }
-        @Published var selectedMode = DebateRequest.Mode.video
-        @Published var debateRequest: DebateRequest?
+        @Published var themes = Debate.Theme.allCases.map { $0.description }
+        @Published var selectedTheme = Debate.Theme.ecologie
+        @Published var modes = Debate.Mode.allCases.map { $0.description }
+        @Published var selectedMode = Debate.Mode.video
+        @Published var debateRequest: Debate?
         @Published var showingAlert = false
         @Published var errorMessage = ""
         @Published var userID: String?
 
         private let firebaseAuthService: FirebaseAuthServiceProtocol
-        private var firestoreService: FirestoreServiceProtocol
+        private var firestoreService: Firestore
 
         init(firebaseAuthService: FirebaseAuthServiceProtocol = FirebaseAuthService(), 
-             firestoreService: FirestoreServiceProtocol = FirestoreService()) {
+             firestoreService: Firestore = FirestoreService()) {
 
             self.firebaseAuthService = firebaseAuthService
             self.firestoreService = firestoreService
@@ -53,7 +53,7 @@ extension DebateCreationView {
             await getDebateRequest()
         }
 
-        private func createDebateRequest(debateRequest: DebateRequest) {
+        private func createDebateRequest(debateRequest: Debate) {
             firestoreService.createDebateRequest(debateRequest: debateRequest) { result in
                 switch result {
                 case .success(let debateRequestID):
@@ -83,7 +83,7 @@ extension DebateCreationView {
         }
 
         private func buildDebateRequest(creatorID: String) {
-            debateRequest = DebateRequest(
+            debateRequest = Debate(
                 creatorID:  creatorID,
                 creationTime: Date.now,
                 theme: selectedTheme,
@@ -113,8 +113,8 @@ extension DebateCreationView {
             switch error {
             case let firestoreServiceError as FirestoreService.FirestoreServiceError:
                 return firestoreServiceError.errorDescription
-            case let firestoreServiceError as FirebaseAuthService.FirebaseAuthServiceError:
-                return firestoreServiceError.errorDescription
+            case let firebaseAuthServiceError as FirebaseAuthService.FirebaseAuthServiceError:
+                return firebaseAuthServiceError.errorDescription
 
             default:
                 return "Something went wrong, please try again."

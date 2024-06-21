@@ -10,5 +10,9 @@ import FirebaseFirestoreSwift
 
 struct Nickname: Codable {
     @DocumentID var id: String?
-    let nickname: String
+    var nickname: String
+}
+
+extension Nickname {
+    static let previewNickname = Nickname(nickname: "Creator")
 }

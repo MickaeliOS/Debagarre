@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct DebateWaitingRoomView: View {
-    @State var debateRequest: DebateRequest
+    @State var debateRequest: Debate
     @State private var shouldAnimate = false
     @StateObject var viewModel = DebateWaitingRoomView.ViewModel()
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
 
     var body: some View {
         GeometryReader { proxy in
@@ -31,7 +31,7 @@ struct DebateWaitingRoomView: View {
 
                             VStack(alignment: .leading) {
                                 Text(viewModel.debateRequestCreatorNickname ?? "Unknown")
-                                Text(viewModel.debateRequestCreator?.gender ?? "Unknown gender")
+                                Text(viewModel.debateRequestCreator?.gender?.rawValue ?? "Unknown gender")
                                 Text("\(viewModel.getUserAgeString(user: viewModel.debateRequestCreator)) ans.")
                             }
 
@@ -65,7 +65,7 @@ struct DebateWaitingRoomView: View {
 
                                 VStack(alignment: .trailing) {
                                     Text(viewModel.debateRequestChallengerNickname ?? "Unknown")
-                                    Text(viewModel.debateRequestChallenger?.gender ?? "Unknown gender")
+                                    Text(viewModel.debateRequestChallenger?.gender?.rawValue ?? "Unknown gender")
                                     Text("\(viewModel.getUserAgeString(user: viewModel.debateRequestChallenger)) ans.")
                                 }
 
@@ -183,18 +183,9 @@ struct DebateWaitingRoomView: View {
             } message: {
                 Text(viewModel.errorMessage)
             }
-            //        .navigationDestination(isPresented: $viewModel.shouldNavigateToDebateFightingView) {
-            //            if let debateRequest = viewModel.debateRequest {
-            //                DebateFightingView(debateRequest: debateRequest)
-            //            } else {
-            //                EmptyView()
-            //                    .onAppear {
-            //                        viewModel.showingAlert = true
-            //                        viewModel.errorMessage = "An error occured during the debate creation process, please try again."
-            //                    }
-            //            }
-            //
-            //        }
+            .navigationDestination(isPresented: $viewModel.shouldNavigateToDebateFightingView) {
+                DebateFightingView(debate: debateRequest)
+            }
         }
     }
 
