@@ -10,7 +10,7 @@ import Foundation
 extension EditProfileView {
 
     @MainActor
-    final class ViewModel<Firestore: FirestoreServiceProtocol>: ObservableObject {
+    final class ViewModel: ObservableObject {
         @Published var showingAlert = false
         @Published var errorMessage = ""
         @Published var updateSucceeded = false
@@ -22,53 +22,155 @@ extension EditProfileView {
         @Published var profilePictureData: Data?
         @Published var bannerData: Data?
         @Published var modifiedUser: User?
-        @Published var userInfosDidChange = false
+        @Published var aboutMeDidChange = false
+        @Published var genderDidChange = false
+        @Published var birthdateDidChange = false
         @Published var profilePicturePath: String?
         @Published var bannerPath: String?
 
         var isSaveButtonDisabled: Bool {
-            return !(profilePictureDidChange || bannerDidChange || userInfosDidChange)
+            return !(profilePictureDidChange || bannerDidChange || aboutMeDidChange || genderDidChange || birthdateDidChange)
         }
 
-        private var firestoreService: Firestore
+        private var firestoreService: FirestoreServiceProtocol
         private var storageService: StorageServiceProtocol
 
-        init(firestoreService: Firestore = FirestoreService(),
+        init(firestoreService: FirestoreServiceProtocol = FirestoreService(),
              storageService: StorageServiceProtocol = StorageService()) {
 
             self.firestoreService = firestoreService
             self.storageService = storageService
         }
 
-        func updateUserFlow(user: User?, profilePicture: User.ProfilePicture?, bannerImage: User.BannerImage?) async {
-            guard var user, let userID = user.id else {
+        func updateUserInfos(user: User?) -> User? {
+            guard var userCopy = user else {
                 errorMessage = "Error, no user detected, please restart the app."
                 showingAlert = true
-                return
+                return nil
             }
 
-            await profilePictureDidChange ? updateProfilePicture(userID: userID) : ()
-            await bannerDidChange ? updateBannerImage(userID: userID) : ()
+            aboutMeDidChange ? userCopy.aboutMe = aboutMe : ()
+            genderDidChange ? userCopy.gender = gender : ()
+            birthdateDidChange ? userCopy.birthdate = birthdate : ()
 
-            if userInfosDidChange {
-                user.birthdate = birthdate
-                user.gender = gender
-                user.aboutMe = aboutMe
-            }
-
-            updateUserInFirestore(user: user)
-
-            if !showingAlert { updateSucceeded = true }
-        }
-
-        private func updateUserInFirestore(user: User) {
             do {
-                try firestoreService.updateUser(user: user)
+                try firestoreService.updateUser(user: userCopy)
+                return userCopy
             } catch {
                 errorMessage = handleError(error: error)
                 showingAlert = true
+                return nil
             }
         }
+
+        func updateProfilePictureV2(userID: String?) async -> String? {
+            guard let profilePictureData else { return nil }
+
+            guard let userID else {
+                errorMessage = "Error, no user detected, please restart the app."
+                showingAlert = true
+                return nil
+            }
+
+            do {
+                return try await storageService.saveProfilePicture(data: profilePictureData, userID: userID)
+            } catch {
+                errorMessage = handleError(error: error)
+                showingAlert = true
+                return nil
+            }
+        }
+
+        func updateBannerImageV2(userID: String?) async -> String? {
+            guard let bannerData else { return nil }
+
+            guard let userID else {
+                errorMessage = "Error, no user detected, please restart the app."
+                showingAlert = true
+                return nil
+            }
+
+            do {
+                return try await storageService.saveBannerImage(data: bannerData, userID: userID)
+            } catch {
+                errorMessage = handleError(error: error)
+                showingAlert = true
+                return nil
+            }
+        }
+
+//        func updateUserFlow(user: User?, profilePicture: User.ProfilePicture?, bannerImage: User.BannerImage?) async {
+//
+//            guard var newUser = user, let userID = newUser.id else {
+//                errorMessage = "Error, no user detected, please restart the app."
+//                showingAlert = true
+//                return
+//            }
+//
+//            if profilePictureDidChange {
+//                await updateProfilePicture(userID: userID)
+//                profilePicture?.path = profilePicturePath ?? ""
+//                profilePictureData = self.profilePictureData
+//            }
+//
+//            if bannerDidChange {
+//                await updateBannerImage(userID: userID)
+//                banner?.path = bannerPath ?? ""
+//                bannerData = self.bannerData
+//            }
+//
+//            aboutMeDidChange ? newUser.aboutMe = aboutMe : ()
+//            genderDidChange ? newUser.gender = gender : ()
+//            birthdateDidChange ? newUser.birthdate = birthdate : ()
+//
+//
+//            if userInfosDidChange {
+//                user.birthdate = birthdate
+//                user.gender = gender
+//                user.aboutMe = aboutMe
+//            }
+//
+//            updateUserInFirestore(user: user)
+//
+//            if !showingAlert { updateSucceeded = true }
+//
+////            guard var newUser = user, let userID = newUser.id else {
+////                errorMessage = "Error, no user detected, please restart the app."
+////                showingAlert = true
+////                return
+////            }
+////
+////            if profilePictureDidChange {
+////                await updateProfilePicture(userID: userID)
+////                profilePicture?.path = profilePicturePath ?? ""
+////                profilePictureData = self.profilePictureData
+////            }
+////
+////            if bannerDidChange {
+////                await updateBannerImage(userID: userID)
+////                banner?.path = bannerPath ?? ""
+////                bannerData = self.bannerData
+////            }
+////
+////            aboutMeDidChange ? newUser.aboutMe = aboutMe : ()
+////            genderDidChange ? newUser.gender = gender : ()
+////            birthdateDidChange ? newUser.birthdate = birthdate : ()
+////
+////            if updateUserInFirestore(user: newUser) {
+////                user = newUser
+////            }
+////
+////            if !showingAlert { updateSucceeded = true }
+//        }
+
+//        private func updateUserInFirestore(user: User) {
+//            do {
+//                try firestoreService.updateUser(user: user)
+//            } catch {
+//                errorMessage = handleError(error: error)
+//                showingAlert = true
+//            }
+//        }
 
         private func updateProfilePicture(userID: String) async {
             guard let profilePictureData else {
@@ -97,15 +199,15 @@ extension EditProfileView {
         }
 
         func compareBirthdate(birthdate: Date?) {
-            userInfosDidChange = self.birthdate != birthdate
+            birthdateDidChange = self.birthdate != birthdate
         }
 
         func compareGender(gender: User.Gender?) {
-            userInfosDidChange = self.gender != gender
+            genderDidChange = self.gender != gender
         }
 
         func compareAboutMe(aboutMe: String?) {
-            userInfosDidChange = self.aboutMe != aboutMe
+            aboutMeDidChange = self.aboutMe != aboutMe
         }
 
         private func handleError(error: Error) -> String {

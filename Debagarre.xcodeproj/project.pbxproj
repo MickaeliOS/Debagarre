@@ -19,7 +19,7 @@
 		830AFA842B989E4500D0C09D /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA7D2B989E4500D0C09D /* CreateAccountView.swift */; };
 		830AFA852B989E4500D0C09D /* HomeTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA7E2B989E4500D0C09D /* HomeTabViewModel.swift */; };
 		830AFA8A2B989E4B00D0C09D /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA872B989E4B00D0C09D /* FirebaseAuthService.swift */; };
-		830AFA8B2B989E4B00D0C09D /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA882B989E4B00D0C09D /* SessionManager.swift */; };
+		830AFA8B2B989E4B00D0C09D /* FirebaseAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA882B989E4B00D0C09D /* FirebaseAuthManager.swift */; };
 		830AFA8C2B989E4B00D0C09D /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA892B989E4B00D0C09D /* FirestoreService.swift */; };
 		830AFA932B989E5200D0C09D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA8F2B989E5200D0C09D /* StringExtension.swift */; };
 		830AFA942B989E5200D0C09D /* AuthenticationTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830AFA902B989E5200D0C09D /* AuthenticationTools.swift */; };
@@ -83,7 +83,7 @@
 		830AFA7D2B989E4500D0C09D /* CreateAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
 		830AFA7E2B989E4500D0C09D /* HomeTabViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTabViewModel.swift; sourceTree = "<group>"; };
 		830AFA872B989E4B00D0C09D /* FirebaseAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
-		830AFA882B989E4B00D0C09D /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		830AFA882B989E4B00D0C09D /* FirebaseAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAuthManager.swift; sourceTree = "<group>"; };
 		830AFA892B989E4B00D0C09D /* FirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		830AFA8F2B989E5200D0C09D /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		830AFA902B989E5200D0C09D /* AuthenticationTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTools.swift; sourceTree = "<group>"; };
@@ -142,6 +142,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		830925F02C2ACC3B0000DEF0 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				830AFA882B989E4B00D0C09D /* FirebaseAuthManager.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
 		830AFA562B989E1B00D0C09D = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +171,7 @@
 		830AFA612B989E1B00D0C09D /* Debagarre */ = {
 			isa = PBXGroup;
 			children = (
+				830925F02C2ACC3B0000DEF0 /* Session */,
 				830AFA712B989E3F00D0C09D /* Model */,
 				830AFA742B989E4500D0C09D /* View+ViewModel */,
 				830AFA862B989E4B00D0C09D /* Services */,
@@ -250,7 +259,6 @@
 		830AFA862B989E4B00D0C09D /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				830AFA882B989E4B00D0C09D /* SessionManager.swift */,
 				830AFA872B989E4B00D0C09D /* FirebaseAuthService.swift */,
 				830AFA892B989E4B00D0C09D /* FirestoreService.swift */,
 				833632092C060D3E00DBB497 /* StorageService.swift */,
@@ -564,7 +572,7 @@
 				830AFA842B989E4500D0C09D /* CreateAccountView.swift in Sources */,
 				830AFA812B989E4500D0C09D /* SignInViewModel.swift in Sources */,
 				8336320A2C060D3E00DBB497 /* StorageService.swift in Sources */,
-				830AFA8B2B989E4B00D0C09D /* SessionManager.swift in Sources */,
+				830AFA8B2B989E4B00D0C09D /* FirebaseAuthManager.swift in Sources */,
 				83810E5B2BC5472A00AB7D3E /* Nickname.swift in Sources */,
 				833632102C08B83300DBB497 /* EditProfileViewModel.swift in Sources */,
 				834312D72BD7E44300ADE940 /* DebateWaitingRoomViewModel.swift in Sources */,

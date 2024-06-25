@@ -10,7 +10,7 @@ import Foundation
 extension DebateCreationView {
 
     @MainActor
-    final class ViewModel<Firestore: FirestoreServiceProtocol>: ObservableObject {
+    final class ViewModel: ObservableObject {
         @Published var pointOfView = ""
         @Published var themes = Debate.Theme.allCases.map { $0.description }
         @Published var selectedTheme = Debate.Theme.ecologie
@@ -22,10 +22,10 @@ extension DebateCreationView {
         @Published var userID: String?
 
         private let firebaseAuthService: FirebaseAuthServiceProtocol
-        private var firestoreService: Firestore
+        private var firestoreService: FirestoreServiceProtocol
 
         init(firebaseAuthService: FirebaseAuthServiceProtocol = FirebaseAuthService(), 
-             firestoreService: Firestore = FirestoreService()) {
+             firestoreService: FirestoreServiceProtocol = FirestoreService()) {
 
             self.firebaseAuthService = firebaseAuthService
             self.firestoreService = firestoreService

@@ -11,7 +11,7 @@ import FirebaseAuth
 extension HomeTabView {
 
     @MainActor
-    final class ViewModel<Firestore: FirestoreServiceProtocol>: ObservableObject {
+    final class ViewModel: ObservableObject {
         @Published var user: User?
         @Published var userNickname: Nickname?
         @Published var profilePicture: User.ProfilePicture?
@@ -21,10 +21,10 @@ extension HomeTabView {
         @Published var showingAlert = false
         @Published var errorMessage = ""
 
-        private var firestoreService: Firestore
+        private var firestoreService: FirestoreServiceProtocol
         private var storageService: StorageServiceProtocol
 
-        init(firestoreService: Firestore = FirestoreService(),
+        init(firestoreService: FirestoreServiceProtocol = FirestoreService(),
              storageService: StorageServiceProtocol = StorageService()) {
             self.firestoreService = firestoreService
             self.storageService = storageService
@@ -106,55 +106,55 @@ extension HomeTabView {
             }
         }
 
-        func listenForUserChanges() {
-            guard let userID = user?.id else { return }
+//        func listenForUserChanges() {
+//            guard let userID = user?.id else { return }
+//
+//            firestoreService.listenForUserChange(userID: userID) { result in
+//                switch result {
+//                case .success(let user):
+//                    self.user = user
+//                case .failure(let error):
+//                    self.errorMessage = self.handleError(error: error)
+//                    self.showingAlert = true
+//                }
+//            }
+//        }
 
-            firestoreService.listenForUserChange(userID: userID) { result in
-                switch result {
-                case .success(let user):
-                    self.user = user
-                case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showingAlert = true
-                }
-            }
-        }
-
-        func listenForProfilePictureChange() {
-            guard let profilePictureID = profilePicture?.id else { return }
-
-            firestoreService.listenForProfilePictureChange(profilePictureID: profilePictureID) { result in
-                switch result {
-                case .success(let profilePicture):
-                    self.profilePicture = profilePicture
-
-                    Task {
-                        await self.fetchUserProfilePicture()
-                    }
-                case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showingAlert = true
-                }
-            }
-        }
-
-        func listenForBannerImageChange() {
-            guard let bannerImageID = bannerImage?.id else { return }
-
-            firestoreService.listenForBannerImageChange(bannerImageID: bannerImageID) { result in
-                switch result {
-                case .success(let bannerImage):
-                    self.bannerImage = bannerImage
-
-                    Task {
-                        await self.fetchUserBannerImage()
-                    }
-                case .failure(let error):
-                    self.errorMessage = self.handleError(error: error)
-                    self.showingAlert = true
-                }
-            }
-        }
+//        func listenForProfilePictureChange() {
+//            guard let profilePictureID = profilePicture?.id else { return }
+//
+//            firestoreService.listenForProfilePictureChange(profilePictureID: profilePictureID) { result in
+//                switch result {
+//                case .success(let profilePicture):
+//                    self.profilePicture = profilePicture
+//
+//                    Task {
+//                        await self.fetchUserProfilePicture()
+//                    }
+//                case .failure(let error):
+//                    self.errorMessage = self.handleError(error: error)
+//                    self.showingAlert = true
+//                }
+//            }
+//        }
+//
+//        func listenForBannerImageChange() {
+//            guard let bannerImageID = bannerImage?.id else { return }
+//
+//            firestoreService.listenForBannerImageChange(bannerImageID: bannerImageID) { result in
+//                switch result {
+//                case .success(let bannerImage):
+//                    self.bannerImage = bannerImage
+//
+//                    Task {
+//                        await self.fetchUserBannerImage()
+//                    }
+//                case .failure(let error):
+//                    self.errorMessage = self.handleError(error: error)
+//                    self.showingAlert = true
+//                }
+//            }
+//        }
 
         private func handleError(error: Error) -> String {
             switch error {

@@ -10,16 +10,16 @@ import Foundation
 extension DebateResearchView {
 
     @MainActor
-    final class ViewModel<Firestore: FirestoreServiceProtocol>: ObservableObject {
+    final class ViewModel: ObservableObject {
         @Published var selectedTheme = Debate.Theme.ecologie
         @Published var debateRequestList: [(debate: Debate, user: User, nickname: Nickname)] = []
         @Published var showingAlert = false
         @Published var errorMessage = ""
         @Published var debateRequestCreator: User?
 
-        private var firestoreService: Firestore
+        private var firestoreService: FirestoreServiceProtocol
 
-        init(firestoreService: Firestore = FirestoreService()) {
+        init(firestoreService: FirestoreServiceProtocol = FirestoreService()) {
             self.firestoreService = firestoreService
         }
 

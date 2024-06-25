@@ -9,8 +9,6 @@ import Foundation
 import FirebaseFirestore
 
 protocol FirestoreServiceProtocol {
-    associatedtype CollectionName: RawRepresentable
-
     func saveUserInDatabase(userID: String, user: User) throws
     func fetchUser(userID: String) async throws -> User
     func fetchUserNickname(nicknameID: String) async throws -> Nickname

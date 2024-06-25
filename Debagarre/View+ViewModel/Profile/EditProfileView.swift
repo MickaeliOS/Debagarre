@@ -10,7 +10,7 @@ import PhotosUI
 
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
     @StateObject private var viewModel = EditProfileView.ViewModel()
 
     // Profile Picture
@@ -21,8 +21,12 @@ struct EditProfileView: View {
     @State private var bannerItem: PhotosPickerItem?
     @State var bannerImage: Image?
 
+    @State private var opttest: String?
+
     var body: some View {
         VStack {
+
+            TextField("iej", text: $opttest ?? "")
             Form {
                 Section("Informations") {
                     TextField("About me.", text: $viewModel.aboutMe)
@@ -90,11 +94,28 @@ struct EditProfileView: View {
         .toolbar {
             Button {
                 Task {
-                    guard let user = homeTabViewModel.user else {
-                        return
+                    if viewModel.aboutMeDidChange || viewModel.genderDidChange || viewModel.birthdateDidChange {
+
+                        guard let user = viewModel.updateUserInfos(user: homeTabViewModel.user) else { return }
+
+                        homeTabViewModel.user = user
                     }
 
-                    await viewModel.updateUserFlow(user: user)
+                    if viewModel.profilePictureDidChange {
+                        guard let profilePicturePath = await viewModel.updateProfilePictureV2(userID: homeTabViewModel.user?.id) else {
+                            return
+                        }
+                        homeTabViewModel.profilePicture?.path = profilePicturePath
+                        homeTabViewModel.profilePictureData = viewModel.profilePictureData
+                    }
+
+                    if viewModel.bannerDidChange {
+                        guard let bannerImagePath = await viewModel.updateBannerImageV2(userID: homeTabViewModel.user?.id) else {
+                            return
+                        }
+                        homeTabViewModel.bannerImage?.path = bannerImagePath
+                        homeTabViewModel.bannerImageData = viewModel.bannerData
+                    }
 
                     if viewModel.updateSucceeded {
                         dismiss()
@@ -163,5 +184,20 @@ extension EditProfileView {
     NavigationStack {
         EditProfileView()
             .environmentObject(HomeTabView.ViewModel())
+    }
+}
+
+public extension Binding {
+    /// Create a non-optional version of an optional `Binding` with a default value
+    /// - Parameters:
+    ///   - lhs: The original `Binding<Value?>` (binding to an optional value)
+    ///   - rhs: The default value if the original `wrappedValue` is `nil`
+    /// - Returns: The `Binding<Value>` (where `Value` is non-optional)
+    static func ??(lhs: Binding<Optional<Value>>, rhs: Value) -> Binding<Value> {
+        Binding {
+            lhs.wrappedValue ?? rhs
+        } set: {
+            lhs.wrappedValue = $0
+        }
     }
 }

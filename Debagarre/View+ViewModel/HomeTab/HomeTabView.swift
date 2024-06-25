@@ -60,7 +60,7 @@ struct HomeTabView: View {
             await viewModel.fetchUserNickname()
             await viewModel.fetchUserProfilePicture()
             await viewModel.fetchUserBannerImage()
-            viewModel.listenForUserChanges()
+//            viewModel.listenForUserChanges()
         }
         .alert("Could not retrieve User", isPresented: $viewModel.showingAlert) {
             Button("OK") { }

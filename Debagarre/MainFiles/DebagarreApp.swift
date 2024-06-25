@@ -22,13 +22,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct YourApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var sessionManager = SessionManager()
+    @StateObject var firebaseAuthManager = FirebaseAuthManager()
     @State private var showLogin = false
 
     var body: some Scene {
         WindowGroup {
             ZStack {
-                switch sessionManager.state {
+                switch firebaseAuthManager.state {
                 case .loading:
                     DebagarreSplashScreenView()
 
@@ -41,7 +41,7 @@ struct YourApp: App {
                         .transition(.move(edge: .leading))
                 }
             }
-            .animation(.easeInOut(duration: 0.5), value: sessionManager.state)
+            .animation(.easeInOut(duration: 0.5), value: firebaseAuthManager.state)
         }
     }
 }

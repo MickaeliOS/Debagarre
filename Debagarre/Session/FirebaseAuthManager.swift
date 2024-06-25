@@ -1,5 +1,5 @@
 //
-//  SessionManager.swift
+//  FirebaseAuthManager.swift
 //  Débagarre
 //
 //  Created by Mickaël Horn on 06/03/2024.
@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseAuth
 
-final class SessionManager: ObservableObject {
+final class FirebaseAuthManager: ObservableObject {
     var authStateHandler: AuthStateDidChangeListenerHandle?
 
     @Published var state: State = .loading
@@ -18,7 +18,7 @@ final class SessionManager: ObservableObject {
     }
 }
 
-extension SessionManager {
+extension FirebaseAuthManager {
     enum State {
         case loading
         case loggedOut
@@ -26,7 +26,7 @@ extension SessionManager {
     }
 }
 
-extension SessionManager {
+extension FirebaseAuthManager {
     private func registerAuthStateHandler() {
         authStateHandler = Auth.auth().addStateDidChangeListener { _, user in
             guard user != nil else {

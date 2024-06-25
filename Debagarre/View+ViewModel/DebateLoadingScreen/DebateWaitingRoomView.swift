@@ -11,7 +11,7 @@ struct DebateWaitingRoomView: View {
     @State var debateRequest: Debate
     @State private var shouldAnimate = false
     @StateObject var viewModel = DebateWaitingRoomView.ViewModel()
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
 
     var body: some View {
         GeometryReader { proxy in

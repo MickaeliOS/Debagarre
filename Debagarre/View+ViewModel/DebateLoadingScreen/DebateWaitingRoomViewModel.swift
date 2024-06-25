@@ -21,9 +21,9 @@ extension DebateWaitingRoomView {
         @Published var debateRequestChallengerNickname: String?
         @Published var showChallenger = true
 
-        private var firestoreService: any FirestoreServiceProtocol
+        private var firestoreService: FirestoreServiceProtocol
 
-        init(firestoreService: any FirestoreServiceProtocol = FirestoreService()) {
+        init(firestoreService: FirestoreServiceProtocol = FirestoreService()) {
             self.firestoreService = firestoreService
         }
     }

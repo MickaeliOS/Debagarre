@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var isEditProfilePresented = false
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
 
     var externalUser: User?
     var externalUserNickname: Nickname?
@@ -47,7 +47,7 @@ struct ProfileView: View {
 
     @ViewBuilder
     private func profileHeaderView(geometry: GeometryProxy, user: User) -> some View {
-        AsyncImage(url: URL(string: homeTabViewModel.user?.profilePicture ?? "")) { image in
+        AsyncImage(url: URL(string: homeTabViewModel.profilePicture?.path ?? "")) { image in
             image
                 .resizable()
                 .scaledToFill()

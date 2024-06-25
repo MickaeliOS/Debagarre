@@ -23,7 +23,7 @@ extension CreateAccountView {
         var userID = ""
         var nicknameID = ""
         private let firebaseAuthService: FirebaseAuthServiceProtocol
-        private var firestoreService: any FirestoreServiceProtocol
+        private var firestoreService: FirestoreServiceProtocol
 
         var hasEmptyField: Bool {
             return email.isReallyEmpty
@@ -33,7 +33,7 @@ extension CreateAccountView {
         }
 
         init(firebaseAuthService: FirebaseAuthServiceProtocol = FirebaseAuthService(),
-             firestoreService: any FirestoreServiceProtocol = FirestoreService()) {
+             firestoreService: FirestoreServiceProtocol = FirestoreService()) {
             self.firebaseAuthService = firebaseAuthService
             self.firestoreService = firestoreService
         }

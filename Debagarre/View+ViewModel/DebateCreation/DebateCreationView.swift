@@ -13,7 +13,7 @@ struct DebateCreationView: View {
     @State private var pointOfViewLimit = 100
     @State private var path = NavigationPath()
 
-    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel<FirestoreService>
+    @EnvironmentObject var homeTabViewModel: HomeTabView.ViewModel
     @StateObject var viewModel = DebateCreationView.ViewModel()
 
     var body: some View {
