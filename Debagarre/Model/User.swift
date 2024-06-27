@@ -14,8 +14,6 @@ struct User: Codable {
     let email: String
     var birthdate: Date?
     var gender: Gender?
-//    var profilePicture: String?
-//    var bannerPicture: String?
     var profilePictureID: String?
     var bannerImageID: String?
     var numberOfDebate: Int?
@@ -27,16 +25,6 @@ extension User {
         case male = "Male"
         case female = "Female"
         case other = "Other"
-    }
-
-    struct ProfilePicture: Codable {
-        @DocumentID var id: String?
-        var path: String
-    }
-
-    struct BannerImage: Codable {
-        @DocumentID var id: String?
-        var path: String
     }
 }
 

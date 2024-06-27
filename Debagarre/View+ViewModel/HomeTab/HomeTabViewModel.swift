@@ -14,8 +14,8 @@ extension HomeTabView {
     final class ViewModel: ObservableObject {
         @Published var user: User?
         @Published var userNickname: Nickname?
-        @Published var profilePicture: User.ProfilePicture?
-        @Published var bannerImage: User.BannerImage?
+        @Published var profilePicture: ProfilePicture?
+        @Published var bannerImage: BannerImage?
         @Published var profilePictureData: Data?
         @Published var bannerImageData: Data?
         @Published var showingAlert = false

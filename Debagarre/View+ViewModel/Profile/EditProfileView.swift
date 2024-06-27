@@ -21,12 +21,8 @@ struct EditProfileView: View {
     @State private var bannerItem: PhotosPickerItem?
     @State var bannerImage: Image?
 
-    @State private var opttest: String?
-
     var body: some View {
         VStack {
-
-            TextField("iej", text: $opttest ?? "")
             Form {
                 Section("Informations") {
                     TextField("About me.", text: $viewModel.aboutMe)
@@ -51,14 +47,13 @@ struct EditProfileView: View {
                 }
             }
             .onChange(of: profilePictureItem) {
-                viewModel.profilePictureDidChange = true
-
                 Task {
                     if let profilePictureData = try? await profilePictureItem?.loadTransferable(type: Data.self),
                        let profilePictureImage = UIImage(data: profilePictureData) {
 
                         self.profilePictureImage = Image(uiImage: profilePictureImage)
                         viewModel.profilePictureData = profilePictureData
+                        viewModel.profilePictureDidChange = true
                     } else {
                         viewModel.showingAlert = true
                         viewModel.errorMessage = "Please pick another image."
@@ -66,14 +61,13 @@ struct EditProfileView: View {
                 }
             }
             .onChange(of: bannerItem) {
-                viewModel.bannerDidChange = true
-
                 Task {
                     if let bannerData = try? await bannerItem?.loadTransferable(type: Data.self),
                        let bannerImage = UIImage(data: bannerData) {
 
                         self.bannerImage = Image(uiImage: bannerImage)
-                        viewModel.bannerData = bannerData
+                        viewModel.bannerImageData = bannerData
+                        viewModel.bannerDidChange = true
                     } else {
                         viewModel.showingAlert = true
                         viewModel.errorMessage = "Please pick another image."
@@ -86,7 +80,6 @@ struct EditProfileView: View {
         }
         .onChange(of: viewModel.birthdate) {
             viewModel.compareBirthdate(birthdate: homeTabViewModel.user?.birthdate)
-
         }
         .onChange(of: viewModel.gender) {
             viewModel.compareGender(gender: homeTabViewModel.user?.gender)
@@ -94,32 +87,32 @@ struct EditProfileView: View {
         .toolbar {
             Button {
                 Task {
-                    if viewModel.aboutMeDidChange || viewModel.genderDidChange || viewModel.birthdateDidChange {
-
-                        guard let user = viewModel.updateUserInfos(user: homeTabViewModel.user) else { return }
-
-                        homeTabViewModel.user = user
-                    }
+                    var userCopy: User? = homeTabViewModel.user
 
                     if viewModel.profilePictureDidChange {
-                        guard let profilePicturePath = await viewModel.updateProfilePictureV2(userID: homeTabViewModel.user?.id) else {
+                        if let profilePicture = await viewModel.updateProfilePictureFlow(user: userCopy) {
+                            userCopy?.profilePictureID = profilePicture.id
+                            homeTabViewModel.profilePicture = profilePicture
+                            homeTabViewModel.profilePictureData = viewModel.profilePictureData
+                        } else {
                             return
                         }
-                        homeTabViewModel.profilePicture?.path = profilePicturePath
-                        homeTabViewModel.profilePictureData = viewModel.profilePictureData
                     }
 
                     if viewModel.bannerDidChange {
-                        guard let bannerImagePath = await viewModel.updateBannerImageV2(userID: homeTabViewModel.user?.id) else {
+                        if let bannerImage = await viewModel.updateBannerImageFlow(user: userCopy) {
+                            userCopy?.bannerImageID = bannerImage.id
+                            homeTabViewModel.bannerImage = bannerImage
+                            homeTabViewModel.bannerImageData = viewModel.bannerImageData
+                        } else {
                             return
                         }
-                        homeTabViewModel.bannerImage?.path = bannerImagePath
-                        homeTabViewModel.bannerImageData = viewModel.bannerData
                     }
 
-                    if viewModel.updateSucceeded {
-                        dismiss()
-                    }
+                    guard let user = viewModel.updateUserInfos(user: userCopy) else { return }
+                    homeTabViewModel.user = user
+
+                    dismiss()
                 }
             } label: {
                 Text("Sauvegarder")
@@ -184,20 +177,5 @@ extension EditProfileView {
     NavigationStack {
         EditProfileView()
             .environmentObject(HomeTabView.ViewModel())
-    }
-}
-
-public extension Binding {
-    /// Create a non-optional version of an optional `Binding` with a default value
-    /// - Parameters:
-    ///   - lhs: The original `Binding<Value?>` (binding to an optional value)
-    ///   - rhs: The default value if the original `wrappedValue` is `nil`
-    /// - Returns: The `Binding<Value>` (where `Value` is non-optional)
-    static func ??(lhs: Binding<Optional<Value>>, rhs: Value) -> Binding<Value> {
-        Binding {
-            lhs.wrappedValue ?? rhs
-        } set: {
-            lhs.wrappedValue = $0
-        }
     }
 }
